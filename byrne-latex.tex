@@ -129,7 +129,7 @@ The following reference is incomplete and will be updated in the future.
 
 \section{Variables and settings}
 
-\subsubsection{Variables}
+\subsubsection{Variables}\label{Variable}
 	
 	There are several variables which control the looks and behaviour.
 	
@@ -171,7 +171,7 @@ The following reference is incomplete and will be updated in the future.
 
 %pathToString
 
-\subsubsection{defineColor.ColorName(color)}
+\subsubsection{defineColor.ColorName(color)}\label{defineColor}
 	
 	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined: \texttt{byred}, \texttt{byblue}, \texttt{byyellow}, \texttt{byblack}, \texttt{bygrey}.
 
@@ -179,7 +179,7 @@ The following reference is incomplete and will be updated in the future.
 	
 	\texttt{color} — an actual calor, can be either of \texttt{color} type or of \texttt{cmykcolor} type.
 
-\subsubsection{selectOutlineColor.ColorName}
+\subsubsection{selectOutlineColor.ColorName}\label{selectOutlineColor}
 	
 	Defines an outline color for a color.
 
@@ -187,19 +187,19 @@ The following reference is incomplete and will be updated in the future.
 	
 % ...
 
-\subsubsection{startTempScale(tmpScale); ... \METAPOST\ code ... stopTempScale;}
+\subsubsection{startTempScale(tmpScale); ... \METAPOST\ code ... stopTempScale;}\label{startTempScale}
 
 	Used to temporarily set scale factor for a section of code;
 
 	\texttt{tmpScale} — scale factor for a section of code.
 		
-\subsubsection{startTempAngleScale(tmpAngleScale); ... \METAPOST\ code ... stopTempAngleScale;}
+\subsubsection{startTempAngleScale(tmpAngleScale); ... \METAPOST\ code ... stopTempAngleScale;}\label{startTempAngleScale}
 
 	Used to temporarily set angle scale factor for a section of code;
 
 	\texttt{tmpAngleScale} — angle scale factor for a section of code.
 
-\subsubsection{startGlobalRotation(rotationAngle); ... \METAPOST\ code ... stopGlobalRotation;}
+\subsubsection{startGlobalRotation(rotationAngle); ... \METAPOST\ code ... stopGlobalRotation;}\label{startGlobalRotation}
 
 	Used to temporarily set global rotation for a section of code;
 
@@ -219,9 +219,9 @@ The following reference is incomplete and will be updated in the future.
 % byLineRender
 % byReturnLineLength
 
-\subsubsection{byLineDefine.LineName(A, B, color, dashed, thick)}
+\subsubsection{byLineDefine.LineName(A, B, color, dashed, thick)}\label{byLineDefine}
 
-	Is used to define straight lines. Does not return anything.
+	Defines a straight line. Does not return anything.
 	
 	\texttt{LineName} — optional line name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{AB}.
 	
@@ -235,31 +235,31 @@ The following reference is incomplete and will be updated in the future.
 
 % byLineStylize
 
-\subsubsection{byLine.LineName(A, B, color, dashed, thick)}
+\subsubsection{byLine.LineName(A, B, color, dashed, thick)}\label{byLine}
 
-	Defines and draws straight lines. Returns a \texttt{picture} of the line.
+	Defines and draws a straight line. Returns a \texttt{picture} of the line.
 	
-	Arguments are the same as in \texttt{byLineDefine}.
+	Arguments are the same as in \texttt{byLineDefine} \ref{byLineDefine}.
 
 % byLineFull
 % byLineWithName
 % byNamedLineFull
 
-\subsubsection{byNamedLine(linesList)}
+\subsubsection{byNamedLine(LINES\_LIST)}\label{byNamedLine}
 
 	Draws lines. Returns a picture of the lines.
 	
-	\texttt{linesList} — a list of lines separated by comma.
+	\texttt{LINES\_LIST} — a comma-separated list of line names.
 
-\subsubsection{byNamedLineSeq(lineShift)(linesList)}
+\subsubsection{byNamedLineSeq(lineShift)(LINES\_LIST)}\label{byNamedLineSeq}
 	
-	Is used to draw lines joined in sequence. Returns a picture of the lines.
+	Draws lines joined in sequence. Returns a picture of the lines.
 	
 	\texttt{lineShift} — how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side, \texttt{$-1$} is for one regular line thickness to the other side.
 	
-	\texttt{linesList} — a list of lines separated by comma.
+	\texttt{LINES\_LIST} — a comma-separated list of line names.
 
-\subsubsection{byMarkLine(position, color)(LineName)}
+\subsubsection{byMarkLine(position, color)(LineName)}\label{byMarkLine}
 
 	Defines and draws a mark on a line.
 	
@@ -281,15 +281,20 @@ The following reference is incomplete and will be updated in the future.
 
 \subsection{Points}
 
-\subsubsection{byPointLabelDefine(A, pointLabel)}
+\subsubsection{byPointLabelDefine(A, pointLabel)}\label{byPointLabelDefine}
 
-Defines a point text label, returns nothing.
+Defines a point text label, returns nothing. By default point names are the same as the names of respective variables.
 
 \texttt{A} — a name of a point of \texttt{suffix} type  (i. e., variable name should be provided).
 
 \texttt{pointLabel} — point label of \texttt{string} type.
 
-%byPointLabelRemove
+\subsubsection{byPointLabelRemove(POINTS\_LIST)}\label{byPointLabelRemove}
+
+Sets labels of multiple points to blank. Useful if text labels are turned on, but you don't want labels on certain points.
+
+	\texttt{POINTS\_LIST} — a comma-separated list of point names.
+
 %byPointMarkDefine
 %byPointXYZDefine
 %byPointXYZEmpty
@@ -306,7 +311,7 @@ Defines a point text label, returns nothing.
 %byCirclePathGenerate
 %byArcRender
 
-\subsubsection{byArcDefineBE.ArcName(O, begin, end, radius, color, dashed, thick, shift, endType)}
+\subsubsection{byArcDefineBE.ArcName(O, begin, end, radius, color, dashed, thick, shift, endType)}\label{byArcDefineBE}
 
 Defines an arc based on its center, radius and two angles. Returns nothing.
 
@@ -328,132 +333,129 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 
 \texttt{shift} — how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
 
-\texttt{endType} — type of arc line ends. \texttt{0} for ends cut by radii and \texttt{1} for ends cut by the chord.
+\texttt{endType} — type of arc line ends. \texttt{0} for ends cut by the radii and \texttt{1} for ends cut by the chord.
 
-\subsubsection{byArcBE.arcName(O, begin, end, radius, color, dashed, thick, shift, endType)}
+\subsubsection{byArcBE.arcName(O, begin, end, radius, color, dashed, thick, shift, endType)}\label{byArcBE}
 
-Defines and draws an arc based on its center, radius and two angles. Returns the picture of the arc.
+	Defines and draws an arc based on its center, radius and two angles. Returns the picture of the arc.
+	
+	Arguments are the same as in \texttt{byArcDefineBE} \ref{byArcDefineBE}.
 
-Arguments are the same as in \texttt{byArcDefineBE}.
+\subsubsection{byArcDefine.ArcName(O, B, E, radius, color, dashed, thick, shift, endType)}\label{byArcDefine}
+	
+	Defines an arc based on its center, radius and two points. Returns nothing.
+	
+	Arguments are the same as in \texttt{byArcDefineBE} \ref{byArcDefineBE}, except for instead of angles in eights points are used.
+	
+	\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{BOE}.
+	
+	\texttt{B, E} — points in the direction of the beginning and the ending of the arc respectively. Of \texttt{suffix} type (i. e., variable names should be provided).
 
-\subsubsection{byArcDefine.ArcName(O, B, E, radius, color, dashed, thick, shift, endType)}
-
-Defines an arc based on its center, radius and two points. Returns nothing.
-
-Arguments are the same as in \texttt{byArcDefineBE}, except for instead of angles in eights points are used.
-
-\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{BOE}.
-
-\texttt{beginningPoint} — point in the direction of the beginning of the arc. Of \texttt{suffix} type (i. e., variable name should be provided).
-
-\texttt{endingPoint} — point in the direction of the ending of the arc. Of \texttt{suffix} type (i. e., variable name should be provided).
-
-\subsubsection{byArc.ArcName(O, beginningPoint, endingPoint, radius, color, dashed, thick, shift, endType)}
-
-Arguments are the same as in \texttt{byArcDefine}.
-
-\subsubsection{byNamedArcExact(arcsList)}
-Draws a picture of arcs just as they were defined. Returns a picture of the arcs.
-
-\texttt{arcsList} — a list of arcs separated by comma.
-
-\subsubsection{byNamedArc(arcsList)}
-Draws a picture of arcs, except of it ignores \texttt{shift} and \texttt{endType}. Returns a picture of the arcs.
-
-\texttt{arcsList} — a list of arcs separated by comma.
+\subsubsection{byArc.ArcName(O, B, E, radius, color, dashed, thick, shift, endType))}\label{byArc}
+	
+	Arguments are the same as in \texttt{byArcDefine} \ref{byArcDefine}.
+	
+\subsubsection{byNamedArcExact(ARCS\_LIST)}\label{byNamedArcExact}
+	Draws a picture of arcs just as they were defined. Returns a picture of the arcs.
+	
+	\texttt{ARCS\_LIST} — a comma-separated list of arc names.
+	
+\subsubsection{byNamedArc(ARCS\_LIST)}\label{byNamedArc}
+	Draws a picture of arcs, except of it ignores \texttt{shift} and \texttt{endType}. Returns a picture of the arcs.
+	
+	\texttt{ARCS\_LIST} — a comma-separated list of arc names.
 
 %byNamedArcLabel
 
-\subsubsection{byCircleDefineFree.CircleName(o, radius, color, dashed, thick, shift)}
+\subsubsection{byCircleDefineFree.CircleName(o, radius, color, dashed, thick, shift)}\label{byCircleDefineFree}
+	
+	Defines a circle based on its center and radius. Returns nothing.
+	
+	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, \texttt{aCircle} is used for a name.
+	
+	\texttt{o} — the center of the circle, of \texttt{pair} type.
+	
+	\texttt{radius} — circle radius.
+	
+	\texttt{color} — circle color, of \texttt{color} type.
+	
+	\texttt{dashed} — is circle line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+	
+	\texttt{thick} — is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	
+	\texttt{shift} — how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
 
-Defines a circle based on its center and radius. Returns nothing.
+\subsubsection{byCircleDefineR.CircleName(O, radius, color, dashed, thick, shift)}\label{byCircleDefineR}
+	
+	Defines a circle based on its center and radius. Returns nothing.
+	
+	Arguments are the same as in \texttt{byCircleDefineFree} \ref{byCircleDefineFree}, except for the center is not defined directly by a \texttt{pair}.
+	
+	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from center name, e.g. \texttt{O}.
+	
+	\texttt{O} — the center of the circle. Of \texttt{suffix} type (i. e., variable name should be provided).
 
-\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, \texttt{aCircle} is used for a name.
+\subsubsection{byCircleR.CircleName(O, radius, color, dashed, thick, shift)}\label{byCircleR}
+	
+	Defines and draws circle based on its center and radius. Returns a picture of that circle.
+	
+	Arguments are the same as in \texttt{byCircleDefineR} \ref{byCircleDefineR}.
 
-\texttt{o} — the center of the circle, of \texttt{pair} type.
+\subsubsection{byCircle.CircleName(O, A, color, dashed, thick, shift)}\label{byCircle}
+	
+	Defines and draws circle based on its center and a point. Returns a picture of that circle.
+	
+	Arguments are the same as in \texttt{byCircleDefineR} \ref{byCircleDefineR}, except for instead of the radius, a point through which the circle is drawn is used.
+	
+	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{OA}.
+	
+	\texttt{A} — a point through which the circle is drawn. Of \texttt{suffix} type (i. e., variable name should be provided).
 
-\texttt{radius} — circle radius.
-
-\texttt{color} — circle color, of \texttt{color} type.
-
-\texttt{dashed} — is circle line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
-
-\texttt{thick} — is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line.
-
-\texttt{shift} — how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
-
-
-\subsubsection{byCircleDefineR.CircleName(O, radius, color, dashed, thick, shift)}
-
-Defines a circle based on its center and radius. Returns nothing.
-
-Arguments are the same as in \texttt{byCircleDefineFree}, except for the center is not defined directly by a \texttt{pair}.
-
-\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from center name, e.g. \texttt{O}.
-
-\texttt{O} — the center of the circle. Of \texttt{suffix} type (i. e., variable name should be provided).
-
-\subsubsection{byCircleR.CircleName(O, radius, color, dashed, thick, shift)}
-
-Defines and draws circle based on its center and radius. Returns a picture of that circle.
-
-Arguments are the same as in \texttt{byCircleDefineR}.
-
-\subsubsection{byCircle.CircleName(O, A, color, dashed, thick, shift)}
-
-Defines and draws circle based on its center and a point. Returns a picture of that circle.
-
-Arguments are the same as in \texttt{byCircleDefineR}, except for instead of the radius, a point through which the circle is drawn is used.
-
-\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{OA}.
-
-\texttt{A} — a point through which the circle is drawn. Of \texttt{suffix} type (i. e., variable name should be provided).
-
-\subsubsection{byCircleABC.CircleName(A, B, C, color, dashed, thick, shift)}
-
-Arguments are the same as in \texttt{byCircleDefineR}, except for instead of the center and the radius, three points through which the circle is drawn are used.
-
-\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{ABC}.
-
-\texttt{A, B, C} — points through which the circle is drawn. Of \texttt{suffix} type (i. e., variable names should be provided).
+\subsubsection{byCircleABC.CircleName(A, B, C, color, dashed, thick, shift)}\label{byCircleABC}
+	
+	Arguments are the same as in \texttt{byCircleDefineR} \ref{byCircleDefineR}, except for instead of the center and the radius, three points through which the circle is drawn are used.
+	
+	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{ABC}.
+	
+	\texttt{A, B, C} — points through which the circle is drawn. Of \texttt{suffix} type (i. e., variable names should be provided).
 
 %byFindCircleCenterABC
 %byFindCircleCenterABCinSpace
 %byReturnCircleCenter
 
-\subsubsection{byNamedCircle(circlesList)}
-
-Draws circles. Returns a picture of the circles.
-
-\texttt{linesList} — a list of circles separated by comma.
+\subsubsection{byNamedCircle(CIRCLES\_LIST)}\label{byNamedCircle}
+	
+	Draws circles. Returns a picture of the circles.
+	
+	\texttt{CIRCLES\_LIST} — a comma-separated list of circle names.
 
 \subsection{Arbitraty figures}
 
-\subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, color, dashed, thick)}
+\subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigureDefine}
+	
+	Defines an arbitrary figure. Returns nothing.
+	
+	\texttt{ArbitraryFigureName} — optional figure name of \texttt{suffix type}. If no name is provided, \texttt{anArbitraryFigure} is used for a name.
+	
+	\texttt{figurePath} — figure path, of \texttt{path} type.
+	
+	\texttt{color} — figure color, of \texttt{color} type.
+	
+	\texttt{dashed} — is figure line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+	
+	\texttt{thick} — is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line.
 
-Defines an arbitrary figure. Returns nothing.
+\subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigure}
 
-\texttt{ArbitraryFigureName} — optional figure name of \texttt{suffix type}. If no name is provided, \texttt{anArbitraryFigure} is used for a name.
+	Defines an arbitrary figure. Returns nothing.
+	
+	Arguments are the same as in \texttt{byArbitraryFigure} \ref{byArbitraryFigure}.
 
-\texttt{figurePath} — figure path, of \texttt{path} type.
+\subsubsection{byNamedArbitraryFigure(ARBITRARY\_FIGURES\_LIST)}\label{byNamedArbitraryFigure}
 
-\texttt{color} — figure color, of \texttt{color} type.
-
-\texttt{dashed} — is figure line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
-
-\texttt{thick} — is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line.
-
-\subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dashed, thick)}
-
-Defines an arbitrary figure. Returns nothing.
-
-Arguments are the same as in \texttt{byArbitraryFigure}.
-
-\subsubsection{byNamedArbitraryFigure(arbitraryFiguresList)}
-
-Draws arbitrary figures. Returns a picture of the figures.
-
-\texttt{arbitraryFiguresList} — a list of figures separated by comma.
+	Draws arbitrary figures. Returns a picture of the figures.
+	
+	\texttt{ARBITRARY\_FIGURES\_LIST} — a comma-separated list of figure names.
 
 %byArbitraryFigureRender
 %byArbitraryCurveDefine
@@ -468,66 +470,79 @@ Draws arbitrary figures. Returns a picture of the figures.
 %byFilledCircleSector
 %byNamedFilledCircleSector
 
-\subsubsection{byPolygonDefine.polygonName(pointsList)(Color)}
+\subsubsection{byPolygonDefine.PolygonName(POINTS\_LIST)(Color)}\label{byPolygonDefine}
 
-Defines a polygon based on its vertex points. Returns nothing.
-
-\texttt{polygonName} — optional polygon name \texttt{suffix}.
-
-\texttt{pointsList} — a list of points separated by comma.
-
-\texttt{Color} — line color, of \texttt{suffix} type (i.e. a color name should be provided).
+	Defines a polygon based on its vertex points. Returns nothing.
+	
+	\texttt{PolygonName} — optional polygon name \texttt{suffix}.
+	
+	\texttt{POINTS\_LIST} — a comma-separated list of point names.
+	
+	\texttt{Color} — line color, of \texttt{suffix} type (i.e. a variable name should be provided).
 
 %byPolygonPathFromList
 
-\subsubsection{byPolygon.polygonName(pointsList)(Color)}
+\subsubsection{byPolygon.polygonName(POINTS\_LIST)(Color)}\label{byPolygon}
 
-Defines and draws a polygon based on its vertex points. Returns a picture of the polygon.
-
-Arguments are the same as in \texttt{byPolygonDefine}.
+	Defines and draws a polygon based on its vertex points. Returns a picture of the polygon.
+	
+	Arguments are the same as in \texttt{byPolygonDefine} \ref{byPolygonDefine}.
 
 %byPolygonName
 
 
-\subsubsection{byNamedPolygon(polygonsList)}
-
-Draws polygons. Returns a picture of the polygons.
-
-\texttt{polygonsList} — a list of polygons separated by comma.
+\subsubsection{byNamedPolygon(POLYGONS\_LIST)}\label{byNamedPolygon}
+	
+	Draws polygons. Returns a picture of the polygons.
+	
+	\texttt{POLYGONS\_LIST} — a comma-separated list of polygon names.
 
 %byMergePolygons
 %polygonCleanup
 
 \subsection{Angles}
 
-\subsubsection{byAngleDefine.angleName(A, B, C, color, style)}
+\subsubsection{byAngleDefine.AngleName(A, B, C, color, style)}\label{byAngleDefine}
+	
+	Defines an angle based on three points. Returns nothing.
 
-Defines an angle based on three points. Returns nothing.
-
-\texttt{A, B, C} — angle points. Of \texttt{suffix} type (i. e., variable names should be provided).
-
-\texttt{color} — angle color, of \texttt{color} type.
-
-\texttt{style} — angle arc style. \texttt{0} for solid filled sector, \texttt{1} for arc, \texttt{2} for dashed arc.
+	\texttt{AngleName} — optional angle name \texttt{suffix}.
+		
+	\texttt{A, B, C} — angle points. Of \texttt{suffix} type (i. e., variable names should be provided).
+	
+	\texttt{color} — angle color, of \texttt{color} type.
+	
+	\texttt{style} — angle arc style. \texttt{0} for solid filled sector, \texttt{1} for arc, \texttt{2} for dashed arc. For more detains see \ref{AngleStyles}.
 
 %byConstructAngleArc
 %byIsArcClockwise
 %byFullCircleToPlane
 
-\subsubsection{byAngle.angleName(A, B, C, color, style)}
+\subsubsection{byAngle.AngleName(A, B, C, color, style)}\label{byAngle}
 
-Defines and draws an angle based on three points. Returns a picture of the angle.
+	Defines and draws an angle based on three points. Returns a picture of the angle.
+	
+	Arguments are the same as in \texttt{byAngleDefine} \ref{byAngleDefine}.
 
-Arguments are the same as in \texttt{byAngleDefine}.
+\subsubsection{byAngleDefineExtended.AngleName(A, B, C, color, style)(OPTIONAL\_COLORS\_LIST)}\label{byAngleDefineExtended}
 
-%byAngleDefineExtended
-%byAngleExtended
+	Defines an angle based on three points. Returns nothing.
+	
+	Arguments are the same as in \texttt{byAngleDefine} \ref{byAngleDefine}, except for using this function it's possible to define optional colors for an angle.
+	
+	\texttt{OPTIONAL\_COLORS\_LIST} — a comma-separated list of optional color names.
+	
+\subsubsection{byAngleExtended.AngleName(A, B, C, color, style)(OPTIONAL\_COLORS\_LIST)}\label{byAngleExtended}
 
-\subsubsection{byNamedAngle(anglesList)}
+	Defines and draws an angle based on three points. Returns a picture of the angle.
+	
+	Arguments are the same as in \texttt{byAngleDefineExtended} \ref{byAngleDefineExtended}.
 
-Draws angles. Returns a picture of the angles.
-
-\texttt{anglesList} — a list of polygons separated by comma.
+\subsubsection{byNamedAngle(ANGLES\_LIST)}\label{byNamedAngle}
+	
+	Draws angles. Returns a picture of the angles.
+	
+	\texttt{ANGLES\_LIST} — a comma-separated list of polygon names.
 
 %byNamedSolidAngle
 %byProcessAnglesList
@@ -549,6 +564,31 @@ Draws angles. Returns a picture of the angles.
 %rightAngle
 %byDefineGenericRightAngles
 
+\subsubsection{Angle styles}\label{AngleStyles}
+
+	It's possible to add custom angle styles. To do this, you first need to define a function, with a particular set of arguments and then include this function's name in a special list. As an example here's the function which describes a regular solid angle sector:
+	
+\begin{MetaPostCode}
+vardef byAngleMSolid (expr angleArc, angleColor)(suffix AngleOptionalColors) =
+    save p;
+    path p;
+    p := angleArc scaled (angleScale*cm);
+    image(
+        fill ((0, 0)--p--cycle) withcolor angleColor;
+    )
+enddef;
+\end{MetaPostCode}
+
+	Note the argument \texttt{AngleOptionalColors}. It is not used for solid angles and is not defined with \texttt{byAngleDefine}, but several optional colors can be defined using \texttt{byAngleDefineExtended} \ref{byAngleDefineExtended} and can be accessed using \texttt{AngleOptionalColors[0]}, \texttt{AngleOptionalColors[1]} etc.
+
+	And here's how this angle style is included in the list:
+
+\begin{MetaPostCode}
+byAngleMacroName[0] := "byAngleMSolid";
+\end{MetaPostCode}
+
+	Here \texttt{0} is the value of \texttt{sty} argument used in \texttt{byAngleDefine} \ref{byAngleDefine} and such to call this particular angle style.
+
 %\subsection{Arrows}
 
 %commonArrowSettings
@@ -569,61 +609,61 @@ Draws angles. Returns a picture of the angles.
 
 \subsection{Text labels}
 
-%\subsubsection{byTextLabel(labelType, text, point, angle, distance)}
+%\subsubsection{byTextLabel(labelType, text, point, angle, distance)}\label{byTextLabel}
 %Draws a text label. Returns a picture of the label.
 
-\subsubsection{byLabelPoint(A, labelAngle, distance)}
+\subsubsection{byLabelPoint(A, labelAngle, distance)}\label{byLabelPoint}
 Draws a text label for a point. Returns a picture of the label.
+	
+	\texttt{A} — the point to label, of \texttt{suffix} type (i. e., point name should be provided).
+	
+	\texttt{labelAngle} — angle at which the label should be drawn in degrees.
+	
+	\texttt{distance} — distance at which the label should be drawn in \texttt{textLabelShift} units.
 
-\texttt{A} — the point to label, of \texttt{suffix} type (i. e., point name should be provided).
+\subsubsection{byLabelLine(distance)(LINES\_LIST)}\label{byLabelLine}
+	
+	Draws text labels for lines. Returns a picture of the labels.
+	
+	\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
+	
+	\texttt{LINES\_LIST} — a comma-separated list of line names.
 
-\texttt{labelAngle} — angle at which the label should be drawn in degrees.
-
-\texttt{distance} — distance at which the label should be drawn in \texttt{textLabelShift} units.
-
-\subsubsection{byLabelLine(distance)(linesList)}
-
-Draws text labels for lines. Returns a picture of the labels.
-
-\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
-
-\texttt{linesList} — a list of lines separated by comma.
-
-\subsubsection{byLabelPolygon(distance)(polygonsList)}
-
-Draws text labels for polygons. Returns a picture of the labels.
-
-\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
-
-\texttt{polygonsList} — a list of polygons separated by comma.
+\subsubsection{byLabelPolygon(distance)(POLYGONS\_LIST)}\label{byLabelPolygon}
+	
+	Draws text labels for polygons. Returns a picture of the labels.
+	
+	\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
+	
+	\texttt{POLYGONS\_LIST} — a comma-separated list of polygon names.
 
 %byLabelCircle
 
-\subsubsection{byLabelsOnCircle(pointsList)(CircleName)}
+\subsubsection{byLabelsOnCircle(POINTS\_LIST)(CircleName)}\label{byLabelsOnCircle}
+	
+	Draws text labels for points on a circle. Returns a picture of the labels.
+	
+	\texttt{POINTS\_LIST} — a comma-separated list of point names.
+	
+	\texttt{CircleName} — circle name of \texttt{suffix type}.
 
-Draws text labels for points on a circle. Returns a picture of the labels.
+\subsubsection{byLabelsOnPolygon(POINTS\_LIST)(style, shift)}\label{byLabelsOnPolygon}
+	
+	Draws text labels for points on a polygon. Returns a picture of the labels.
+	
+	\texttt{POINTS\_LIST} — a comma-separated list of point names.
+	
+	\texttt{style} — specifies which points to omit. \texttt{0} to draw labels for all listed points, \texttt{1} to draw labels for all listed points, except for the ones at straight angles, \texttt{2} omits first and last points, \texttt{3} omits first point, \texttt{1} omits last point.
+	
+	\texttt{shift} — negative to move labels closer, positive to move labels farther.
 
-\texttt{pointsList} — a list of points separated by comma.
-
-\texttt{CircleName} — circle name of \texttt{suffix type}.
-
-\subsubsection{byLabelsOnPolygon(pointsList)(style, shift)}
-
-Draws text labels for points on a polygon. Returns a picture of the labels.
-
-\texttt{pointsList} — a list of points separated by comma.
-
-\texttt{style} — specifies which points to omit. \texttt{0} to draw labels for all listed points, \texttt{1} to draw labels for all listed points, except for the ones at straight angles, \texttt{2} omits first and last points, \texttt{3} omits first point, \texttt{1} omits last point.
-
-\texttt{shift} — negative to move labels closer, positive to move labels farther.
-
-\subsubsection{byLabelLineEnd(A,B)(distance)}
-
-Draws a text label for a line end. Returns a picture of the label.
-
-\texttt{A, B} — line ends, of \texttt{suffix} type (i. e., point name should be provided).
-
-\texttt{distance} — negative to move labels closer, positive to move labels farther.
+\subsubsection{byLabelLineEnd(A,B)(distance)}\label{byLabelLineEnd}
+	
+	Draws a text label for a line end. Returns a picture of the label.
+	
+	\texttt{A, B} — line ends, of \texttt{suffix} type (i. e., point name should be provided).
+	
+	\texttt{distance} — negative to move labels closer, positive to move labels farther.
 
 %byLabelAngleCompensate
 
