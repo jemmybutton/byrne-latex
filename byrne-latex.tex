@@ -1,0 +1,771 @@
+\documentclass{ltxdoc}
+\usepackage{byrne}
+\usepackage{ccicons,bxtexlogo,listings,hyperref}
+
+\lstset{
+language=MetaPost,
+numbers=left,
+numberstyle=\tiny,
+basicstyle=\scriptsize
+}
+
+\lstnewenvironment{MetaPostCode}
+  {\lstset{language=TeX,basicstyle=\ttfamily\scriptsize,frame=none}}
+  {}
+\lstnewenvironment{LaTeXCode}
+  {\lstset{language=MetaPost,basicstyle=\ttfamily\scriptsize,frame=none}}
+  {}
+
+\author{Sergey Slyusarev}
+\title{``Byrne'' v. 0.2.2 package for \METAPOST and \LaTeX}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document describes ``Byrne'' package for \METAPOST\ and \LaTeX.
+\end{abstract}
+
+\begin{centering}
+
+This document is distributed under CC-BY-SA 4.0 license 
+
+\ccbysa 
+
+https://github.com/jemmybutton/byrne-latex
+
+\end{centering}
+
+\section{Introduction}
+Oliver Byrne's 1847 quirky edition on the first six books of Euclid's ``Elements'' is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams are colored and parts of these diagrams are directly incorporated into text.
+
+Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
+
+The \ConTeXt\ version's main goal was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ version of this toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
+
+\section{An example}
+
+\begin{minipage}{\textwidth}
+\vskip 0.5\baselineskip
+\defineNewPicture{
+textLabels := true;
+pair A, B, C;
+A := (0, 0);
+B := (0, 2cm);
+C := (3cm, 0);
+byAngleDefine(C, B, A, byyellow, 0);
+byAngleDefine(B, A, C, byblue, 0);
+byAngleDefine(A, C, B, byred, 0);
+draw byNamedAngleResized();
+byLineDefine(A, B, byred, 0, 0);    
+byLineDefine(B, C, byblue, 0, 0);   
+byLineDefine(C, A, byyellow, 0, 0); 
+draw byNamedLineSeq(0)(AB,BC,CA);
+draw byLabelsOnPolygon(A, B, C)(0, 0);
+}
+~\hfill\drawCurrentPicture\hfill~
+\vskip \baselineskip
+
+In 
+\drawFromCurrentPicture[middle][triangleABC]{
+draw byNamedLineSeq(0)(AB,BC,CA);
+draw byLabelsOnPolygon(A, B, C)(0, 0);
+} 
+the angle \drawAngle{A} 
+is a right angle, therefore \triangleABC 
+is a right-angled triangle. 
+In it $\drawUnitLine{CB} > \drawUnitLine{AB}$ 
+and $\drawUnitLine{BC} > \drawUnitLine{AC}$.
+\end{minipage}
+
+\vskip 2\baselineskip
+The construction above is described like this:
+\vskip 1.5\baselineskip
+
+\begin{LaTeXCode}
+\defineNewPicture{ % MetaPost code to describe the main diagram is placed inside
+  textLabels := true; % This turns text labels on
+  pair A, B, C; 
+  A := (0, 0);  
+  B := (0, 2cm);
+  C := (3cm, 0);
+  byAngleDefine(C, B, A, byyellow, 0); % This defines a yellow angle CBA
+  byAngleDefine(B, A, C, byblue, 0);   
+  byAngleDefine(A, C, B, byred, 0);    
+  draw byNamedAngleResized(); % Draws angles. 
+  byLineDefine(A, B, byred, 0, 0);    % This defines a red line AB. 
+  byLineDefine(B, C, byblue, 0, 0);   
+  byLineDefine(C, A, byyellow, 0, 0); 
+  draw byNamedLineSeq(1)(AB,BC,CA); % Draws joint lines in sequence
+  draw byLabelsOnPolygon(A, B, C)(0, 0); % Draws text labels
+}                                   
+
+\drawCurrentPicture % Draws the diagram
+
+In 
+\drawFromCurrentPicture[middle][triangleABC]{ % Draws an image based 
+  draw byNamedLineSeq(0)(AB,BC,CA);           % on the last diagram
+}
+the angle \drawAngle{A} is a right angle, therefore \triangleABC\ is
+a right-angled triangle. In it $\drawUnitLine{CB} > \drawUnitLine{AB}$ 
+and $\drawUnitLine{BC} > \drawUnitLine{AC}$. 
+\end{LaTeXCode}
+
+\vskip 1.5\baselineskip
+
+Several things to note here. 
+
+In the \METAPOST\ part: 
+All 2D points are ordinary \METAPOST\ pairs and can be defined and manipulated as such. Normally every part of the diagram is first defined (e.g. \texttt{byAngleDefine} or \texttt{byLineDefine}) and then is drawn (e.g. \texttt{draw byNamedAngleResized...} or \texttt{draw byNamedLineSeq...}). Also, although Byrne's original book didn't include text labels at all, they are implemented in this package. Normally they are placed semi-manually in the main diagram (using functions like \texttt{byLabelsOnPolygon}) and mostly automatically in offspring pictures. By default they are turned off, and to turn them on \texttt{textLabels := true;} should be set.
+
+In the \LaTeX\ part: 
+The most general way to reference the main diagram is to use \cs{drawFromCurrentPicture}. It will process arbitrary \METAPOST\ code based on the main diagram's code and output an image. However, it would be too cumbersome to use this route every time, so a few shortcuts are in place. If you do need to process arbitrary code, you can give the picture a name (in the example it's ``triangleABC''). It will define a macro of the same name \cs{triangleABC} which will output the same image. For most common cases there are special macros which don't require you to write any \METAPOST\ code. For instance \cs{drawAngle} and \cs{drawUnitLine} allow you to call angles and lines simply by name. The names don't have to match the initial definition exactly. For instance, the angle in the example can be called ``A'', ``BAC'' or ``ABC'' interchangably, or the line can be called either ``BC'' or ``CB'', depending on your intentions.
+
+For more examples you can look at the source code of the \href{https://github.com/jemmybutton/byrne-euclid/}{\ConTeXt\ version of Byrne's book.} This package shares syntax with it and code can be transferred to \LaTeX\ with minimal changes.
+
+The following reference is incomplete and will be updated in the future.
+
+\section{\METAPOST\ part reference}
+
+\section{Variables and settings}
+
+\subsubsection{Variables}
+	
+	There are several variables which control the looks and behaviour.
+	
+	\texttt{lineWidth} — the width for regular lines, set to \texttt{2pt} by default.
+	
+	\texttt{lineWidthThin} — the width for thin lines, set to \texttt{1pt} by default.
+	
+	\texttt{lineWidthHair} — the width for superthin lines, set to \texttt{1/2pt} by default.
+	
+	\texttt{pointMarkSize} — size of point marks, set to \texttt{4pt} by default.
+	
+	\texttt{pointLinesSize} — size for line secments used to depict points, set to \texttt{1/2cm} by default.
+
+	\texttt{defaultScaleFactor} — global default scale factor, set to \texttt{1} by default.
+	
+	\texttt{angleScale} — scale factor for angle arcs, set to \texttt{1} by default.
+
+	\texttt{globalRotation} — angle to rotate the whole constructions.
+
+	\texttt{markLength} — size of marks on lines, set to \texttt{3lineWidth} by default.
+
+	\texttt{rayExtension} — length for a ray depiction, set to \texttt{1/3cm} by default.
+
+%	magnitudeScale := 5/18;
+%	magnitudeGap := 3/2lineWidth;
+	
+	\texttt{textLabels} — whether to render text labels, set to \texttt{false} by default.
+
+%ghostLines := true;
+
+	\texttt{autoRightAngles} — whether to depict right angles using angles instead of arcs, set to \texttt{false} by default.
+
+%omitDuplicateTextLabels := false;
+	
+	\texttt{textLabelShift} — how far away to put text labels from points, set to \texttt{lineWidth} by default.
+	
+%autoLabelingMode := false;
+%mainPictureMode := false;
+
+%pathToString
+
+\subsubsection{defineColor.ColorName(color)}
+	
+	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined: \texttt{byred}, \texttt{byblue}, \texttt{byyellow}, \texttt{byblack}, \texttt{bygrey}.
+
+	\texttt{ColorName} — mandatory color name of \texttt{suffix type}.
+	
+	\texttt{color} — an actual calor, can be either of \texttt{color} type or of \texttt{cmykcolor} type.
+
+\subsubsection{selectOutlineColor.ColorName}
+	
+	Defines an outline color for a color.
+
+	\texttt{ColorName} — mandatory color name of \texttt{suffix type}.
+	
+% ...
+
+\subsubsection{startTempScale(tmpScale); ... \METAPOST\ code ... stopTempScale;}
+
+	Used to temporarily set scale factor for a section of code;
+
+	\texttt{tmpScale} — scale factor for a section of code.
+		
+\subsubsection{startTempAngleScale(tmpAngleScale); ... \METAPOST\ code ... stopTempAngleScale;}
+
+	Used to temporarily set angle scale factor for a section of code;
+
+	\texttt{tmpAngleScale} — angle scale factor for a section of code.
+
+\subsubsection{startGlobalRotation(rotationAngle); ... \METAPOST\ code ... stopGlobalRotation;}
+
+	Used to temporarily set global rotation for a section of code;
+
+	\texttt{rotationAngle} — global rotation for a section of code.
+	
+%startAutoLabeling
+%stopAutoLabeling
+
+%startOffspringPictureMode
+%stopOffspringPictureMode
+
+%startMainPictureMode
+%stopMainPictureMode
+
+\subsection{Lines}
+
+% byLineRender
+% byReturnLineLength
+
+\subsubsection{byLineDefine.LineName(A, B, color, dashed, thick)}
+
+	Is used to define straight lines. Does not return anything.
+	
+	\texttt{LineName} — optional line name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{AB}.
+	
+	\texttt{A, B} — point names, of \texttt{suffix} type (i. e., variable names should be provided).
+	
+	\texttt{color} — line color, of \texttt{color} type.
+	
+	\texttt{dashed} — is line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+	
+	\texttt{thick} — is line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+
+% byLineStylize
+
+\subsubsection{byLine.LineName(A, B, color, dashed, thick)}
+
+	Defines and draws straight lines. Returns a \texttt{picture} of the line.
+	
+	Arguments are the same as in \texttt{byLineDefine}.
+
+% byLineFull
+% byLineWithName
+% byNamedLineFull
+
+\subsubsection{byNamedLine(linesList)}
+
+	Draws lines. Returns a picture of the lines.
+	
+	\texttt{linesList} — a list of lines separated by comma.
+
+\subsubsection{byNamedLineSeq(lineShift)(linesList)}
+	
+	Is used to draw lines joined in sequence. Returns a picture of the lines.
+	
+	\texttt{lineShift} — how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side, \texttt{$-1$} is for one regular line thickness to the other side.
+	
+	\texttt{linesList} — a list of lines separated by comma.
+
+\subsubsection{byMarkLine(position, color)(LineName)}
+
+	Defines and draws a mark on a line.
+	
+	\texttt{position} — a position of the mark. \texttt{0} for one end of the line, \texttt{1} for the other end of the line.
+	
+	\texttt{color} — mark color, of \texttt{color} type.
+	
+	\texttt{LineName} — line name, of \texttt{suffix} type.
+
+%byNamedMarkLine
+%byFindLinePointedThere
+%byConstructCompoundLine
+%byExpandLines
+%byNamedCompoundLine
+%byNamedCompoundRay
+%byNamedCompoundIndLine
+%byNamedCompoundLineRender
+%generateLineSynonyms
+
+\subsection{Points}
+
+\subsubsection{byPointLabelDefine(A, pointLabel)}
+
+Defines a point text label, returns nothing.
+
+\texttt{A} — a name of a point of \texttt{suffix} type  (i. e., variable name should be provided).
+
+\texttt{pointLabel} — point label of \texttt{string} type.
+
+%byPointLabelRemove
+%byPointMarkDefine
+%byPointXYZDefine
+%byPointXYZEmpty
+%byIsPointInSpace
+%byPair
+%byRotatePoints
+%byPointMarkRender
+%byNamedPointMark
+%byPointMark
+%byNamedPointLines
+
+\subsection{Arcs and circles}
+
+%byCirclePathGenerate
+%byArcRender
+
+\subsubsection{byArcDefineBE.ArcName(O, begin, end, radius, color, dashed, thick, shift, endType)}
+
+Defines an arc based on its center, radius and two angles. Returns nothing.
+
+\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point name, e.g. \texttt{O}.
+
+\texttt{O} — the center of the circle an arc is from, of \texttt{suffix} type (i. e., variable name should be provided).
+
+\texttt{begin} — beginning of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc.
+
+\texttt{end} — ending of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc.
+
+\texttt{radius} — arc radius.
+
+\texttt{color} — arc color, of \texttt{color} type.
+
+\texttt{dashed} — is arc line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+
+\texttt{thick} — is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+
+\texttt{shift} — how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
+
+\texttt{endType} — type of arc line ends. \texttt{0} for ends cut by radii and \texttt{1} for ends cut by the chord.
+
+\subsubsection{byArcBE.arcName(O, begin, end, radius, color, dashed, thick, shift, endType)}
+
+Defines and draws an arc based on its center, radius and two angles. Returns the picture of the arc.
+
+Arguments are the same as in \texttt{byArcDefineBE}.
+
+\subsubsection{byArcDefine.ArcName(O, B, E, radius, color, dashed, thick, shift, endType)}
+
+Defines an arc based on its center, radius and two points. Returns nothing.
+
+Arguments are the same as in \texttt{byArcDefineBE}, except for instead of angles in eights points are used.
+
+\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{BOE}.
+
+\texttt{beginningPoint} — point in the direction of the beginning of the arc. Of \texttt{suffix} type (i. e., variable name should be provided).
+
+\texttt{endingPoint} — point in the direction of the ending of the arc. Of \texttt{suffix} type (i. e., variable name should be provided).
+
+\subsubsection{byArc.ArcName(O, beginningPoint, endingPoint, radius, color, dashed, thick, shift, endType)}
+
+Arguments are the same as in \texttt{byArcDefine}.
+
+\subsubsection{byNamedArcExact(arcsList)}
+Draws a picture of arcs just as they were defined. Returns a picture of the arcs.
+
+\texttt{arcsList} — a list of arcs separated by comma.
+
+\subsubsection{byNamedArc(arcsList)}
+Draws a picture of arcs, except of it ignores \texttt{shift} and \texttt{endType}. Returns a picture of the arcs.
+
+\texttt{arcsList} — a list of arcs separated by comma.
+
+%byNamedArcLabel
+
+\subsubsection{byCircleDefineFree.CircleName(o, radius, color, dashed, thick, shift)}
+
+Defines a circle based on its center and radius. Returns nothing.
+
+\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, \texttt{aCircle} is used for a name.
+
+\texttt{o} — the center of the circle, of \texttt{pair} type.
+
+\texttt{radius} — circle radius.
+
+\texttt{color} — circle color, of \texttt{color} type.
+
+\texttt{dashed} — is circle line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+
+\texttt{thick} — is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+
+\texttt{shift} — how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
+
+
+\subsubsection{byCircleDefineR.CircleName(O, radius, color, dashed, thick, shift)}
+
+Defines a circle based on its center and radius. Returns nothing.
+
+Arguments are the same as in \texttt{byCircleDefineFree}, except for the center is not defined directly by a \texttt{pair}.
+
+\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from center name, e.g. \texttt{O}.
+
+\texttt{O} — the center of the circle. Of \texttt{suffix} type (i. e., variable name should be provided).
+
+\subsubsection{byCircleR.CircleName(O, radius, color, dashed, thick, shift)}
+
+Defines and draws circle based on its center and radius. Returns a picture of that circle.
+
+Arguments are the same as in \texttt{byCircleDefineR}.
+
+\subsubsection{byCircle.CircleName(O, A, color, dashed, thick, shift)}
+
+Defines and draws circle based on its center and a point. Returns a picture of that circle.
+
+Arguments are the same as in \texttt{byCircleDefineR}, except for instead of the radius, a point through which the circle is drawn is used.
+
+\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{OA}.
+
+\texttt{A} — a point through which the circle is drawn. Of \texttt{suffix} type (i. e., variable name should be provided).
+
+\subsubsection{byCircleABC.CircleName(A, B, C, color, dashed, thick, shift)}
+
+Arguments are the same as in \texttt{byCircleDefineR}, except for instead of the center and the radius, three points through which the circle is drawn are used.
+
+\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{ABC}.
+
+\texttt{A, B, C} — points through which the circle is drawn. Of \texttt{suffix} type (i. e., variable names should be provided).
+
+%byFindCircleCenterABC
+%byFindCircleCenterABCinSpace
+%byReturnCircleCenter
+
+\subsubsection{byNamedCircle(circlesList)}
+
+Draws circles. Returns a picture of the circles.
+
+\texttt{linesList} — a list of circles separated by comma.
+
+\subsection{Arbitraty figures}
+
+\subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, color, dashed, thick)}
+
+Defines an arbitrary figure. Returns nothing.
+
+\texttt{ArbitraryFigureName} — optional figure name of \texttt{suffix type}. If no name is provided, \texttt{anArbitraryFigure} is used for a name.
+
+\texttt{figurePath} — figure path, of \texttt{path} type.
+
+\texttt{color} — figure color, of \texttt{color} type.
+
+\texttt{dashed} — is figure line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+
+\texttt{thick} — is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+
+\subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dashed, thick)}
+
+Defines an arbitrary figure. Returns nothing.
+
+Arguments are the same as in \texttt{byArbitraryFigure}.
+
+\subsubsection{byNamedArbitraryFigure(arbitraryFiguresList)}
+
+Draws arbitrary figures. Returns a picture of the figures.
+
+\texttt{arbitraryFiguresList} — a list of figures separated by comma.
+
+%byArbitraryFigureRender
+%byArbitraryCurveDefine
+%byNamedArbitraryCurve
+%byListToPath
+%byArbitraryCurve
+
+\subsection{Filled figures}
+
+%byFilledCircleSegment
+%byNamedFilledCircleSegment
+%byFilledCircleSector
+%byNamedFilledCircleSector
+
+\subsubsection{byPolygonDefine.polygonName(pointsList)(Color)}
+
+Defines a polygon based on its vertex points. Returns nothing.
+
+\texttt{polygonName} — optional polygon name \texttt{suffix}.
+
+\texttt{pointsList} — a list of points separated by comma.
+
+\texttt{Color} — line color, of \texttt{suffix} type (i.e. a color name should be provided).
+
+%byPolygonPathFromList
+
+\subsubsection{byPolygon.polygonName(pointsList)(Color)}
+
+Defines and draws a polygon based on its vertex points. Returns a picture of the polygon.
+
+Arguments are the same as in \texttt{byPolygonDefine}.
+
+%byPolygonName
+
+
+\subsubsection{byNamedPolygon(polygonsList)}
+
+Draws polygons. Returns a picture of the polygons.
+
+\texttt{polygonsList} — a list of polygons separated by comma.
+
+%byMergePolygons
+%polygonCleanup
+
+\subsection{Angles}
+
+\subsubsection{byAngleDefine.angleName(A, B, C, color, style)}
+
+Defines an angle based on three points. Returns nothing.
+
+\texttt{A, B, C} — angle points. Of \texttt{suffix} type (i. e., variable names should be provided).
+
+\texttt{color} — angle color, of \texttt{color} type.
+
+\texttt{style} — angle arc style. \texttt{0} for solid filled sector, \texttt{1} for arc, \texttt{2} for dashed arc.
+
+%byConstructAngleArc
+%byIsArcClockwise
+%byFullCircleToPlane
+
+\subsubsection{byAngle.angleName(A, B, C, color, style)}
+
+Defines and draws an angle based on three points. Returns a picture of the angle.
+
+Arguments are the same as in \texttt{byAngleDefine}.
+
+%byAngleDefineExtended
+%byAngleExtended
+
+\subsubsection{byNamedAngle(anglesList)}
+
+Draws angles. Returns a picture of the angles.
+
+\texttt{anglesList} — a list of polygons separated by comma.
+
+%byNamedSolidAngle
+%byProcessAnglesList
+%byAngleMWhite
+%byAngleMSolid
+%byAngleMLine
+%byAngleMThinLine
+%byAngleMDashedLine
+%byNamedAngleSidesFull
+%byNamedAngleDummySides
+%byNamedAngleSides
+%byNamedAngleWithDummySides
+%byNamedAngleResized
+%generateAngleSynonyms
+%sortPointAnglesList
+%bySplitStringIntoAngles
+%byConstructCompoundAngle
+%twoRightAngles
+%rightAngle
+%byDefineGenericRightAngles
+
+%\subsection{Arrows}
+
+%commonArrowSettings
+%byRotationArrowDefine
+%byGenerateRotationArrowPath
+%byNamedRotationArrow
+%byFlatArrowDefine
+%byNamedFlatArrow
+
+%\subsection{Spheres}
+
+%\subsection{Magnitudes}
+
+%byMagnitudeSymbolDefine
+%byNamedMagnitudeSymbol
+%byMagnitudeDefine
+%byNamedMagnitude
+
+\subsection{Text labels}
+
+%\subsubsection{byTextLabel(labelType, text, point, angle, distance)}
+%Draws a text label. Returns a picture of the label.
+
+\subsubsection{byLabelPoint(A, labelAngle, distance)}
+Draws a text label for a point. Returns a picture of the label.
+
+\texttt{A} — the point to label, of \texttt{suffix} type (i. e., point name should be provided).
+
+\texttt{labelAngle} — angle at which the label should be drawn in degrees.
+
+\texttt{distance} — distance at which the label should be drawn in \texttt{textLabelShift} units.
+
+\subsubsection{byLabelLine(distance)(linesList)}
+
+Draws text labels for lines. Returns a picture of the labels.
+
+\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
+
+\texttt{linesList} — a list of lines separated by comma.
+
+\subsubsection{byLabelPolygon(distance)(polygonsList)}
+
+Draws text labels for polygons. Returns a picture of the labels.
+
+\texttt{distance} — distance at which the labels should be drawn in \texttt{textLabelShift} units.
+
+\texttt{polygonsList} — a list of polygons separated by comma.
+
+%byLabelCircle
+
+\subsubsection{byLabelsOnCircle(pointsList)(CircleName)}
+
+Draws text labels for points on a circle. Returns a picture of the labels.
+
+\texttt{pointsList} — a list of points separated by comma.
+
+\texttt{CircleName} — circle name of \texttt{suffix type}.
+
+\subsubsection{byLabelsOnPolygon(pointsList)(style, shift)}
+
+Draws text labels for points on a polygon. Returns a picture of the labels.
+
+\texttt{pointsList} — a list of points separated by comma.
+
+\texttt{style} — specifies which points to omit. \texttt{0} to draw labels for all listed points, \texttt{1} to draw labels for all listed points, except for the ones at straight angles, \texttt{2} omits first and last points, \texttt{3} omits first point, \texttt{1} omits last point.
+
+\texttt{shift} — negative to move labels closer, positive to move labels farther.
+
+\subsubsection{byLabelLineEnd(A,B)(distance)}
+
+Draws a text label for a line end. Returns a picture of the label.
+
+\texttt{A, B} — line ends, of \texttt{suffix} type (i. e., point name should be provided).
+
+\texttt{distance} — negative to move labels closer, positive to move labels farther.
+
+%byLabelAngleCompensate
+
+\section{LaTeX part reference}
+
+\subsection{\textbackslash defineNewPicture[offspringPictureScaleFactor][mainPictureScaleFactor]\{MP code\}}
+
+	This macro is used to describe a main diagram.
+
+	\texttt{offspringPictureScaleFactor} — how much smaller offspring pictures should be. \texttt{1/3} by default.
+	
+	\texttt{mainPictureScaleFactor} — scale factor for the main picture. \texttt{1} by default.
+	
+	\texttt{MP code} — actual \METAPOST\ code to describe the main picture.
+
+\subsection{\textbackslash drawCurrentPicture}
+	
+	Draws the main diagram.
+
+% \drawImageFromCurrentInstance
+
+% \unmarkPictAsReady
+
+% \addToUndefineList
+
+% \defineFromCurrentPicture
+
+\subsection{\textbackslash drawFromCurrentPicture[verticalAlignment][PictureName]\{MP code\}}
+
+	This macro is used to describe a diagram, based on the main diagram.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+
+	\texttt{PictureName} — optional picture name.
+
+	\texttt{MP code} — actual \METAPOST\ code to describe the picture.
+	
+	Can be called later using \texttt{\textbackslash PictureName}.
+
+% \drawDefinedPicture
+
+\subsection{\textbackslash drawUnitLine[LineSecondName]\{LineName\}}
+
+	Used to draw a line of unit length with colors and labels based on the line of the same name in the main diagram.
+
+	\texttt{LineSecondName} — optional line name.
+	
+	\texttt{LineName} — name of the line to reference in the main diagram. 
+
+	If a name is given, can be called later using \texttt{\textbackslash ulineLineNameLineSecondName}, otherwise — \texttt{\textbackslash ulineLineName}. 
+	
+%\drawProportionalLine
+
+\subsection{\textbackslash drawSizedLine[LineSecondName]\{LineName\}}
+
+	Used to draw a line with colors and labels based on and length proportional to the line of the same name in the main diagram.
+
+	\texttt{LineSecondName} — optional line name. 
+	
+	\texttt{LineName} — name of the line to reference in the main diagram. 
+	
+	If a name is given, can be called later using \texttt{\textbackslash slineLineNameLineSecondName}, otherwise — \texttt{\textbackslash slineLineName}. 
+
+%\drawUnitRay
+
+%\drawProportionalRay
+
+%\drawSizedRay
+
+%\drawUnitIndLine
+
+%\drawProportionalIndLine
+
+\subsubsection{\textbackslash drawRightAngle}
+
+	Draws a right angle.
+
+\subsubsection{\textbackslash drawTwoRightAngles}
+
+	Draws two right angles.
+
+
+\subsubsection{\textbackslash drawAngle\{AngleName\}}
+
+	Draws an angle.
+
+	\texttt{lineName} — name of the line to reference in the main diagram. 
+	
+	Can be called later using \texttt{\textbackslash angleAngleName}.
+	
+%\drawAngleWithSides
+	
+\subsection{\textbackslash drawPolygon[verticalAlignment][PolygonNewName]\{PolygonName\}}
+
+	Used to draw a polygon.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+
+	\texttt{PolygonNewName} — optional polygon name. 
+	
+	\texttt{PolygonName} — name of the polygon to reference in the main diagram. 
+	
+	If a name is given, can be called later using \texttt{\textbackslash PolygonNewName}, otherwise — \texttt{\textbackslash polygonPolygonName}. 
+	
+\subsection{\textbackslash drawCircle[verticalAlignment][scaleFactor]\{CircleName\}}
+
+	Used to draw a circle.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+	
+	\texttt{scaleFactor} — optional scale factor for the circle to replace the default offspring picture scale factor. 
+	
+	\texttt{CircleName} — name of the circle to reference in the main diagram. 
+	
+	Can be called later using \texttt{\textbackslash circleCircleName}.
+	
+\subsection{\textbackslash drawArc[verticalAlignment][scaleFactor]\{ArcName\}}
+
+	Used to draw an arc.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+	
+	\texttt{scaleFactor} — optional scale factor for the arc to replace the default offspring picture scale factor. 
+	
+	\texttt{ArcName} — name of the arc to reference in the main diagram. 
+	
+	Can be called later using \texttt{\textbackslash arcCircleName}.
+	
+\subsection{\textbackslash drawLine[verticalAlignment][LineNewName]\{LineName\}}
+
+	Used to draw a line.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+	
+	\texttt{LineNewName} — optional line name. 
+	
+	\texttt{LineName} — name of the line to reference in the main diagram. 
+	
+	If a name is given, can be called later using \texttt{\textbackslash lineLineName}, otherwise — \texttt{\textbackslash LineNewName}. 
+	
+%\drawPointM
+%\drawPointL
+%\drawMagnitude
+
+\end{document}
