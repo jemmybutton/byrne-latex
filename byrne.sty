@@ -188,7 +188,7 @@ end
 		{\drawFromCurrentPicture[middle][uray#2#1]{startAutoLabeling;draw byNamedCompoundRay(#1, 0)(#2);stopAutoLabeling;}}%
 }
 
-\def\drawProportionalRay#1{\drawFromCurrentPicture[middle][rayprop#1]{startAutoLabeling;draw byNamedCompoundRay(1cm, 1)(#1);stopAutoLabeling;}}
+\def\drawProportionalRay#1{\drawFromCurrentPicture[middle][pray#1]{startAutoLabeling;draw byNamedCompoundRay(1cm, 1)(#1);stopAutoLabeling;}}
 
 \DeclareDocumentCommand{\drawSizedRay}{o m}{%
 	\IfNoValueTF{#1}%
@@ -270,7 +270,7 @@ end
 		{\global\def\plal{#1}}%
 	\IfNoValueTF{#2}%
 		{\drawFromCurrentPicture[\plal][pointl#3]{startAutoLabeling; draw byNamedPointLines(#3,""); stopAutoLabeling;}}%
-		{\drawFromCurrentPicture[\plal][pointl#3-#2]{startAutoLabeling; draw byNamedPointLines(#3,"#2"); stopAutoLabeling;}}%
+		{\drawFromCurrentPicture[\plal][pointl#3Minus#2]{startAutoLabeling; draw byNamedPointLines(#3,"#2"); stopAutoLabeling;}}%
 }
 
 \DeclareDocumentCommand{\drawMagnitude}{o o m}{%
