@@ -10,14 +10,14 @@ basicstyle=\scriptsize
 }
 
 \lstnewenvironment{MetaPostCode}
-  {\lstset{language=TeX,basicstyle=\ttfamily\scriptsize,frame=none}}
+  {\lstset{language=TeX,basicstyle=\ttfamily\scriptsize,frame=none,numbers=none}}
   {}
 \lstnewenvironment{LaTeXCode}
-  {\lstset{language=MetaPost,basicstyle=\ttfamily\scriptsize,frame=none}}
+  {\lstset{language=MetaPost,basicstyle=\ttfamily\scriptsize,frame=none,numbers=none}}
   {}
 
 \author{Sergey Slyusarev}
-\title{``Byrne'' v. 0.2.2 package for \METAPOST and \LaTeX}
+\title{``Byrne'' v. 0.2.2 package for \METAPOST\ and \LaTeX}
 
 \begin{document}
 \maketitle
@@ -37,7 +37,7 @@ https://github.com/jemmybutton/byrne-latex
 \end{centering}
 
 \section{Introduction}
-Oliver Byrne's 1847 quirky edition on the first six books of Euclid's ``Elements'' is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams are colored and parts of these diagrams are directly incorporated into text.
+Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams are colored and parts of these diagrams are directly incorporated into text.
 
 Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
 
@@ -582,7 +582,7 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 
 \subsubsection{Angle styles}\label{AngleStyles}
 
-	It's possible to add custom angle styles. To do this, you first need to define a function, with a particular set of arguments and then include this function's name in a special list. As an example here's the function which describes a regular solid angle sector:
+	It's possible to add custom angle styles. To do this, you first need to define a function, with a particular set of arguments and then include this function's name into a special list. As an example here's the function which describes a regular solid angle sector:
 	
 \begin{MetaPostCode}
 vardef byAngleMSolid (expr angleArc, angleColor)(suffix AngleOptionalColors) =
@@ -604,6 +604,34 @@ byAngleMacroName[0] := "byAngleMSolid";
 \end{MetaPostCode}
 
 	Here \texttt{0} is the value of \texttt{sty} argument used in \texttt{byAngleDefine} \ref{byAngleDefine} and such to call this particular angle style.
+	
+	As a more practical example, in Byrne's book, in a couple of places for some reason he choses not to use arcs and sectors, but instead goes with unique angle designs. In order not to include these peculiarities into the main lib in the \ConTeXt\ version they were defined \textit{in situ}. Here's the definition from IV.III:
+
+\begin{MetaPostCode}	
+vardef byAngleMSectors (expr angleArc, angleColor)(suffix angleOptionalColors) =
+    save p;
+    path p[];
+    p1 := (subpath(0, arctime (1/3arclength(angleArc)) of angleArc) 
+    	of angleArc) 
+    	scaled (u*angleScale);
+    p2 := (subpath(arctime (1/3arclength(angleArc)) 
+    	of angleArc, arctime(2/3arclength(angleArc)) of angleArc) of angleArc) 
+    	scaled (u*angleScale);
+    p3 := (subpath(arctime (2/3arclength(angleArc)) 
+    	of angleArc, length(angleArc)) of angleArc) 
+    	scaled (u*angleScale);
+    image(
+        fill ((0, 0)--p1--cycle) withcolor angleOptionalColors[0];
+        fill ((0, 0)--p2--cycle) withcolor angleColor;
+        fill ((0, 0)--p3--cycle) withcolor angleOptionalColors[1];
+    )
+enddef;
+byAngleMacroName[3] := "byAngleMSectors";
+\end{MetaPostCode}
+
+This angle style employs two optional colors and can be called by setting \texttt{style} argument \ref{byAngleDefine} to \texttt{3}: \texttt{byAngleDefineExtended(A, B, C, byblack, 3)(byblue, byred);} \ref{byAngleDefineExtended}.
+
+%https://archive.org/details/firstsixbooksofe00byrn/page/126/mode/2up
 
 %\subsection{Arrows}
 
@@ -685,7 +713,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 \section{\LaTeX\ part reference}
 
-\subsection{General purpose macros}
+\subsection{General purpose}
 
 \subsubsection{\textbackslash defineNewPicture[offspringPictureScaleFactor] [mainPictureScaleFactor] \{\METAPOST\ code\}}
 
@@ -695,7 +723,13 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	\texttt{mainPictureScaleFactor} — scale factor for the main picture. \texttt{1} by default.
 	
-	\texttt{MP code} — actual \METAPOST\ code to describe the main picture.
+	\texttt{\METAPOST\ code} — actual \METAPOST\ code to describe the main picture. To have some sinppets of code always executed before and after the code for the main picture, define \cs{mpPre} and \cs{mpPost} macros respectively in the preamble of your document, like this:
+	
+\begin{LaTeXCode}
+\def\mpPre{...some MP code...}
+\def\mpPost{...some MP code...}
+\end{LaTeXCode}
+
 
 \subsubsection{\textbackslash drawCurrentPicture}
 	
@@ -733,7 +767,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 % \drawDefinedPicture
 
-\subsection{Specialized macros}
+\subsection{Specialized}
 
 \subsubsection{\textbackslash drawUnitLine[LineSecondName]\{LineName\}}
 
