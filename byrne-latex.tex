@@ -546,7 +546,7 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 	
 	Arguments are the same as in \texttt{byAngleDefine} \ref{byAngleDefine}, except for using this function it's possible to define optional colors for an angle.
 	
-	\texttt{OPTIONAL\_COLORS\_LIST} — a comma-separated list of optional color names.
+	\texttt{OPTIONAL\_COLORS\_LIST} — a comma-separated list of optional color names. See \ref{AngleStyles} for details.
 	
 \subsubsection{byAngleExtended.AngleName(A, B, C, color, style)(OPTIONAL\_COLORS\_LIST)}\label{byAngleExtended}
 
@@ -673,7 +673,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	\texttt{shift} — negative to move labels closer, positive to move labels farther.
 
-\subsubsection{byLabelLineEnd(A,B)(distance)}\label{byLabelLineEnd}
+\subsubsection{byLabelLineEnd(A, B)(distance)}\label{byLabelLineEnd}
 	
 	Draws a text label for a line end. Returns a picture of the label.
 	
@@ -683,7 +683,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 %byLabelAngleCompensate
 
-\section{LaTeX part reference}
+\section{\LaTeX\ part reference}
 
 \subsection{General purpose macros}
 
@@ -744,7 +744,15 @@ Draws a text label for a point. Returns a picture of the label.
 	\texttt{LineName} — name of the line to reference in the main diagram. 
 
 	If a name is given, can be called later using \texttt{\textbackslash ulineLineNameLineSecondName}, otherwise — \texttt{\textbackslash ulineLineName}. 
+
+\subsubsection{\textbackslash drawProportionalLine\{LineName\}}
+
+	Draws a line with colors and labels based on and length linearly proportional to the line of the same name in the main diagram.
+
+	\texttt{LineName} — name of the line to reference in the main diagram. 
 	
+	Can be called later using \texttt{\textbackslash plineLineName}.
+
 %\drawProportionalLine
 
 \subsubsection{\textbackslash drawSizedLine[LineSecondName]\{LineName\}}
@@ -766,8 +774,14 @@ Draws a text label for a point. Returns a picture of the label.
 	\texttt{LineName} — name of the line to reference in the main diagram. 
 
 	If a name is given, can be called later using \texttt{\textbackslash urayLineNameRayName}, otherwise — \texttt{\textbackslash urayLineName}. 
+
+%\subsubsection{\textbackslash drawProportionalRay\{LineName\}}
+
+%	Draws a ray.
+
+%	\texttt{LineName} — name of the line to reference in the main diagram. 
 	
-%\drawProportionalRay
+%	Can be called later using \texttt{\textbackslash prayAngleName}.
 
 %\drawSizedRay
 
@@ -788,11 +802,17 @@ Draws a text label for a point. Returns a picture of the label.
 
 	Draws an angle.
 
-	\texttt{lineName} — name of the line to reference in the main diagram. 
+	\texttt{AngleName} — name of the angle to reference in the main diagram. 
 	
 	Can be called later using \texttt{\textbackslash angleAngleName}.
 	
-%\drawAngleWithSides
+\subsubsection{\textbackslash drawAngleWithSides \{AngleName\}}
+
+	Draws an angle and sections of its adjacent sides.
+
+	\texttt{AngleName} — name of the angle to reference in the main diagram. 
+	
+	Can be called later using \texttt{\textbackslash anglewithsidesAngleName}.
 	
 \subsubsection{\textbackslash drawPolygon[verticalAlignment][PolygonNewName]\{PolygonName\}}
 
