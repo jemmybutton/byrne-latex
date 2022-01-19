@@ -16,6 +16,8 @@ basicstyle=\scriptsize
   {\lstset{language=MetaPost,basicstyle=\ttfamily\scriptsize,frame=none,numbers=none}}
   {}
 
+\def\mpPre{textLabels := true;}
+
 \author{Sergey Slyusarev}
 \title{``Byrne'' v. 0.2.2 package for \METAPOST\ and \LaTeX}
 
@@ -139,19 +141,19 @@ The following reference is incomplete and will be updated in the future.
 	
 	\texttt{lineWidth} — the width for regular lines, set to \texttt{2pt} by default.
 	
-	\texttt{lineWidthThin} — the width for thin lines, set to \texttt{1pt} by default.
+	\texttt{lineWidthThin} — the width for thin lines, set to \texttt{1pt} by default. 
 	
 	\texttt{lineWidthHair} — the width for superthin lines, set to \texttt{1/2pt} by default.
 	
 	\texttt{pointMarkSize} — size of point marks, set to \texttt{4pt} by default.
 	
-	\texttt{pointLinesSize} — size for line secments used to depict points, set to \texttt{1/2cm} by default.
+	\texttt{pointLinesSize} — size for line segments used to depict points, set to \texttt{1/2cm} by default.
 
 	\texttt{defaultScaleFactor} — global default scale factor, set to \texttt{1} by default.
 	
 	\texttt{angleScale} — scale factor for angle arcs, set to \texttt{1} by default.
 
-	\texttt{globalRotation} — angle to rotate the whole constructions.
+	\texttt{globalRotation} — angle to rotate the whole picture.
 
 	\texttt{markLength} — size of marks on lines, set to \texttt{3lineWidth} by default.
 
@@ -236,6 +238,17 @@ The following reference is incomplete and will be updated in the future.
 	\texttt{dashed} — is line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
 	
 	\texttt{thick} — is line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+
+\defineNewPicture{
+pair A, B, C, D;
+A := (0, 0);
+B := (2cm, 0);
+C := (3cm, 0);
+D := (5cm, 0);
+byLineDefine(A, B, byred, 0, 0);
+byLineDefine(C, D, byblue, 1, 1);
+}
+	For example, this line \drawUnitLine{AB} is defined as \texttt{byLineDefine(A, B, byred, 0, 0);} and this line \drawUnitLine{CD} is defined as \texttt{byLineDefine(C, D, byblue, 1, 1);}
 
 % byLineStylize
 
@@ -417,15 +430,21 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 	
 	Arguments are the same as in \texttt{byCircleDefineR} \ref{byCircleDefineR}.
 
-\subsubsection{byCircle.CircleName(O, A, color, dashed, thick, shift)}\label{byCircle}
+\subsubsection{byCircleDefine.CircleName(O, A, color, dashed, thick, shift)}\label{byCircleDefine}
 	
-	Defines and draws circle based on its center and a point. Returns a picture of that circle.
+	Defines circle based on its center and a point. Returns nothing.
 	
 	Arguments are the same as in \texttt{byCircleDefineR} \ref{byCircleDefineR}, except for instead of the radius, a point through which the circle is drawn is used.
 	
 	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, it is being constructed from point names, e.g. \texttt{OA}.
 	
 	\texttt{A} — a point through which the circle is drawn. Of \texttt{suffix} type (i. e., variable name should be provided).
+
+\subsubsection{byCircle.CircleName(O, A, color, dashed, thick, shift)}\label{byCircle}
+	
+	Defines and draws circle based on its center and a point. Returns a picture of that circle.
+	
+	Arguments are the same as in \texttt{byCircleDefine} \ref{byCircleDefine}.
 
 \subsubsection{byCircleABC.CircleName(A, B, C, color, dashed, thick, shift)}\label{byCircleABC}
 	
@@ -907,6 +926,18 @@ Draws a text label for a point. Returns a picture of the label.
 \subsubsection{\textbackslash drawPointL[verticalAlignment][LinesToOmit]\{PointName\}}
 
 	Draws a point, depicted as line segments starting/ending in it.
+
+	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+	
+	\texttt{LinesToOmit} — a comma-separated list lines, segments of which not to draw. 
+	
+	\texttt{PointName} — name of the point to reference in the main diagram. 
+	
+	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointlPointNameMinusLinesToOmit}, otherwise — \texttt{\textbackslash pointlPointName}. 
+
+\subsubsection{\textbackslash drawPoint[verticalAlignment][LinesToOmit]\{PointName\}}
+
+	Draws a point, depicted as line segments starting/ending in it with a point mark if defined.
 
 	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
 	

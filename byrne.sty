@@ -273,6 +273,21 @@ end
 		{\drawFromCurrentPicture[\plal][pointl#3Minus#2]{startAutoLabeling; draw byNamedPointLines(#3,"#2"); stopAutoLabeling;}}%
 }
 
+\DeclareDocumentCommand{\drawPoint}{o o m}{%
+	\IfNoValueTF{#1}%
+		{\global\def\plal{middle}}%
+		{\global\def\plal{#1}}%
+	\IfNoValueTF{#2}%
+		{\drawFromCurrentPicture[\plal][pointl#3]{
+		startAutoLabeling; draw byNamedPointLines(#3,""); stopAutoLabeling;
+		draw byNamedPointMark(#3);
+		}}%
+		{\drawFromCurrentPicture[\plal][pointl#3Minus#2]{
+		startAutoLabeling; draw byNamedPointLines(#3,"#2"); stopAutoLabeling;
+		draw byNamedPointMark(#3);
+		}}%
+}
+
 \DeclareDocumentCommand{\drawMagnitude}{o o m}{%
 	\IfNoValueTF{#1}%
 		{\global\def\plal{middle}}%
