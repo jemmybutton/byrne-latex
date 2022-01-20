@@ -1985,7 +1985,7 @@ vardef byReturnCircleCenter (expr circleName) =
             scantokens(getAttribute("circle", "CName", circleName))
             )
     else:
-        getAttribute("circle", "Center", str cN)
+        getAttribute("circle", "Center", circleName)
     fi
 enddef;
 

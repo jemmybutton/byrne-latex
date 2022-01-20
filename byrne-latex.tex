@@ -239,15 +239,15 @@ The following reference is incomplete and will be updated in the future.
 	
 	\texttt{thick} — is line thick. \texttt{0} for regular line and \texttt{1} for thin line.
 
-\defineNewPicture{
-pair A, B, C, D;
-A := (0, 0);
-B := (2cm, 0);
-C := (3cm, 0);
-D := (5cm, 0);
-byLineDefine(A, B, byred, 0, 0);
-byLineDefine(C, D, byblue, 1, 1);
-}
+	\defineNewPicture{
+		pair A, B, C, D;
+		A := (0, 0);
+		B := (2cm, 0);
+		C := (3cm, 0);
+		D := (5cm, 0);
+		byLineDefine(A, B, byred, 0, 0);
+		byLineDefine(C, D, byblue, 1, 1);
+	}
 	For example, this line \drawUnitLine{AB} is defined as \texttt{byLineDefine(A, B, byred, 0, 0);} and this line \drawUnitLine{CD} is defined as \texttt{byLineDefine(C, D, byblue, 1, 1);}
 
 % byLineStylize
@@ -269,15 +269,42 @@ byLineDefine(C, D, byblue, 1, 1);
 	\texttt{LINES\_LIST} — a comma-separated list of line names.
 
 \subsubsection{byNamedLineSeq(lineShift)(LINES\_LIST)}\label{byNamedLineSeq}
+
+	\defineNewPicture[1]{
+		pair A, B, C;
+		A :=  dir(45) scaled 1/4cm;
+		B := (0, 0);
+		C :=  dir(0) scaled 1/4cm;
+		byLineDefine(A, B, byred, 0, 0);
+		byLineDefine(B,C, byyellow, 0, 0);
+		draw byNamedLineSeq(0)(AB,BC) scaled 2;
+	}
+		
+	Draws lines joined in sequence. Line joints look like this:\drawCurrentPicture. Returns a picture of the lines.
 	
-	Draws lines joined in sequence. Returns a picture of the lines.
-	
-	\texttt{lineShift} — how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side, \texttt{$-1$} is for one regular line thickness to the other side.
+	\texttt{lineShift} — how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side%
+	\drawFromCurrentPicture[bottom]{
+	draw byNamedLineSeq(1)(AB,BC) scaled 2;
+	draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
+	}, 
+	\texttt{$-1$} is for one regular line thickness to the other side%
+	\drawFromCurrentPicture[bottom]{
+		draw byNamedLineSeq(-1)(AB,BC) scaled 2;
+		draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
+	}.
 	
 	\texttt{LINES\_LIST} — a comma-separated list of line names.
+	
 
 \subsubsection{byMarkLine(position, color)(LineName)}\label{byMarkLine}
 
+	\defineNewPicture[1]{
+		pair A, B;
+		A := (0, 0);
+		B := (1cm, 0);
+		byLineDefine(A, B, byblue, 0, 0);
+	}
+	
 	Defines and draws a mark on a line.
 	
 	\texttt{position} — a position of the mark. \texttt{0} for one end of the line, \texttt{1} for the other end of the line.
@@ -285,10 +312,18 @@ byLineDefine(C, D, byblue, 1, 1);
 	\texttt{color} — mark color, of \texttt{color} type.
 	
 	\texttt{LineName} — line name, of \texttt{suffix} type.
+	
+	For example this line mark \drawFromCurrentPicture{
+		startAutoLabeling;
+		draw byNamedLine(AB);
+		draw byLabelLine(0)(AB);
+		draw byMarkLine(1/4, byred, AB);
+		stopAutoLabeling;
+	} is drawn with \texttt{draw byMarkLine(1/4, byred, AB);}.
 
 \subsubsection{byNamedMarkLine(LineName)}
 
-	Draws a mark on the given line.
+	Draws a defined mark on the given line.
 	
 	\texttt{LineName} — line name, of \texttt{suffix} type.
 	
@@ -319,11 +354,20 @@ byLineDefine(C, D, byblue, 1, 1);
 
 \subsubsection{byPointMarkDefine(PointName)(color, style)}\label{byPointMarkDefine}
 
+	\defineNewPicture{
+		textLabels := false;
+		pair A, B;
+		A := (0, 0);
+		B := (1cm, 0);
+		draw byPointMark(A,  byblue, 0);
+		draw byPointMark(B,  byred, 1);
+	}
+	
 	Defines a point mark.
 
 	\texttt{color} — mark color, of \texttt{color} type.
 
-	\texttt{style} — \texttt{0} for solid circle, \texttt{1} for white circle with outline.
+	\texttt{style} — \texttt{0} for solid circle \drawPointM{A}, \texttt{1} for white circle with outline \drawPointM{B}.
 		
 %byPointXYZDefine
 %byPointXYZEmpty
@@ -342,27 +386,54 @@ byLineDefine(C, D, byblue, 1, 1);
 
 \subsubsection{byArcDefineBE.ArcName(O, begin, end, radius, color, dashed, thick, shift, endType)}\label{byArcDefineBE}
 
-Defines an arc based on its center, radius and two angles. Returns nothing.
+	Defines an arc based on its center, radius and two angles. Returns nothing.
 
-\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point name, e.g. \texttt{O}.
-
-\texttt{O} — the center of the circle an arc is from, of \texttt{suffix} type (i. e., variable name should be provided).
-
-\texttt{begin} — beginning of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc.
-
-\texttt{end} — ending of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc.
-
-\texttt{radius} — arc radius.
-
-\texttt{color} — arc color, of \texttt{color} type.
-
-\texttt{dashed} — is arc line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
-
-\texttt{thick} — is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line.
-
-\texttt{shift} — how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
-
-\texttt{endType} — type of arc line ends. \texttt{0} for ends cut by the radii and \texttt{1} for ends cut by the chord.
+	\defineNewPicture[1]{
+		textLabels := false;
+		pair A, B;
+		A := (0, 0);
+	}
+	
+	\texttt{ArcName} — optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point name, e.g. \texttt{O}.
+	
+	\texttt{O} — the center of the circle an arc is from, of \texttt{suffix} type (i. e., variable name should be provided).
+	
+	\texttt{begin, end} — beginning and ending of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc. For instance, this
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 0, 3, 2/6cm, byblue, 0, 0, 1, 0);
+	}
+	is \texttt{0, 3} and this
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 5, 7, 2/6cm, byblue, 0, 0, 1, 0);
+	}	
+	is \texttt{5, 7}.
+	
+	\texttt{radius} — arc radius.
+	
+	\texttt{color} — arc color, of \texttt{color} type.
+	
+	\texttt{dashed} — is arc line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
+	
+	\texttt{thick} — is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	
+	\texttt{shift} — how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 1/2, 7/2, 1/6cm, byyellow, 0, 0, 1, 0) scaled 2;
+		draw (subpath (1/2, 7/2) of (fullcircle scaled 4/6cm)) withpen pencircle scaled 1/2pt;
+	}, \texttt{$-1$} is for one regular line thickness inwards
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 1/2, 7/2, 1/6cm, byyellow, 0, 0, -1, 0) scaled 2;
+		draw (subpath (1/2, 7/2) of (fullcircle scaled 4/6cm)) withpen pencircle scaled 1/2pt;
+	}.
+	
+	\texttt{endType} — type of arc line ends. \texttt{0} for ends cut by the radii
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 1/2, 7/2, 1/6cm, byred, 0, 0, 0, 0) scaled 2;
+	}
+	and \texttt{1} for ends cut by the chord
+	\drawFromCurrentPicture{
+		draw byArcBE(A, 1/2, 7/2, 1/6cm, byred, 0, 0, 0, 1) scaled 2;
+	}.
 
 \subsubsection{byArcBE.arcName(O, begin, end, radius, color, dashed, thick, shift, endType)}\label{byArcBE}
 
@@ -400,6 +471,9 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 	
 	Defines a circle based on its center and radius. Returns nothing.
 	
+	\defineNewPicture[1]{
+	}
+	
 	\texttt{CircleName} — optional circle name of \texttt{suffix type}. If no name is provided, \texttt{aCircle} is used for a name.
 	
 	\texttt{o} — the center of the circle, of \texttt{pair} type.
@@ -412,7 +486,17 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 	
 	\texttt{thick} — is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line.
 	
-	\texttt{shift} — how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards, \texttt{$-1$} is for one regular line thickness inwards.
+	\texttt{shift} — how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards
+	\drawFromCurrentPicture{
+		byCircleDefineFree((0,0), 1/8cm, byyellow, 0, 0, 1);
+		draw byNamedCircle(aCircle) scaled 2;
+		draw fullcircle scaled 1/2cm;
+	}, \texttt{$-1$} is for one regular line thickness inwards
+	\drawFromCurrentPicture{
+		byCircleDefineFree((0,0), 1/8cm, byyellow, 0, 0, -1);
+		draw byNamedCircle(aCircle) scaled 2;
+		draw fullcircle scaled 1/2cm;
+	}.
 
 \subsubsection{byCircleDefineR.CircleName(O, radius, color, dashed, thick, shift)}\label{byCircleDefineR}
 	
@@ -539,6 +623,23 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 
 \subsubsection{byAngleDefine.AngleName(A, B, C, color, style)}\label{byAngleDefine}
 	
+	\defineNewPicture{
+		textLabels := false;
+		pair A, B, C, A', B', C', A'', B'', C'';
+		A :=  dir(45) scaled 1/4cm;
+		B := (0, 0);
+		C :=  dir(0) scaled 1/4cm;
+		A' := A shifted (1cm, 0);
+		B' := B shifted (1cm, 0);
+		C' := C shifted (1cm, 0);
+		A'' := A shifted (2cm, 0);
+		B'' := B shifted (2cm, 0);
+		C'' := C shifted (2cm, 0);
+		byAngleDefine(A, B, C, byred, 0);
+		byAngleDefine(A', B', C', byred, 1);
+		byAngleDefine(A'', B'', C'', byred, 2);
+	}
+	
 	Defines an angle based on three points. Returns nothing.
 
 	\texttt{AngleName} — optional angle name \texttt{suffix}.
@@ -547,7 +648,7 @@ Defines an arc based on its center, radius and two angles. Returns nothing.
 	
 	\texttt{color} — angle color, of \texttt{color} type.
 	
-	\texttt{style} — angle arc style. \texttt{0} for solid filled sector, \texttt{1} for arc, \texttt{2} for dashed arc. For more detains see \ref{AngleStyles}.
+	\texttt{style} — angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. For more detains see \ref{AngleStyles}.
 
 %byConstructAngleArc
 %byIsArcClockwise
@@ -626,19 +727,47 @@ byAngleMacroName[0] := "byAngleMSolid";
 	
 	As a more practical example, in Byrne's book, in a couple of places for some reason he choses not to use arcs and sectors, but instead goes with unique angle designs. In order not to include these peculiarities into the main lib in the \ConTeXt\ version they were defined \textit{in situ}. Here's the definition from IV.III:
 
+	\defineNewPicture{
+		vardef byAngleMSectors (expr angleArc, angleColor)(suffix angleOptionalColors) =
+		    save p;
+		    path p[];
+		    p1 := (subpath(0, arctime (1/3arclength(angleArc)) of angleArc) 
+		    	of angleArc) 
+		    	scaled (angleScale*cm);
+		    p2 := (subpath(arctime (1/3arclength(angleArc)) 
+		    	of angleArc, arctime(2/3arclength(angleArc)) of angleArc) of angleArc) 
+		    	scaled (angleScale*cm);
+		    p3 := (subpath(arctime (2/3arclength(angleArc)) 
+		    	of angleArc, length(angleArc)) of angleArc) 
+		    	scaled (angleScale*cm);
+		    image(
+		        fill ((0, 0)--p1--cycle) withcolor angleOptionalColors[0];
+		        fill ((0, 0)--p2--cycle) withcolor angleColor;
+		        fill ((0, 0)--p3--cycle) withcolor angleOptionalColors[1];
+		    )
+		enddef;
+		byAngleMacroName[3] := "byAngleMSectors";
+		textLabels := false;
+		pair A, B, C;
+		A :=  dir(45) scaled 1/4cm;
+		B := (0, 0);
+		C :=  dir(0) scaled 1/4cm;
+		byAngleDefineExtended(A, B, C, byred, 3)(byblue, byyellow);
+	}
+	
 \begin{MetaPostCode}	
 vardef byAngleMSectors (expr angleArc, angleColor)(suffix angleOptionalColors) =
     save p;
     path p[];
     p1 := (subpath(0, arctime (1/3arclength(angleArc)) of angleArc) 
     	of angleArc) 
-    	scaled (u*angleScale);
+    	scaled (angleScale*cm);
     p2 := (subpath(arctime (1/3arclength(angleArc)) 
     	of angleArc, arctime(2/3arclength(angleArc)) of angleArc) of angleArc) 
-    	scaled (u*angleScale);
+    	scaled (angleScale*cm);
     p3 := (subpath(arctime (2/3arclength(angleArc)) 
     	of angleArc, length(angleArc)) of angleArc) 
-    	scaled (u*angleScale);
+    	scaled (angleScale*cm);
     image(
         fill ((0, 0)--p1--cycle) withcolor angleOptionalColors[0];
         fill ((0, 0)--p2--cycle) withcolor angleColor;
@@ -648,7 +777,7 @@ enddef;
 byAngleMacroName[3] := "byAngleMSectors";
 \end{MetaPostCode}
 
-This angle style employs two optional colors and can be called by setting \texttt{style} argument \ref{byAngleDefine} to \texttt{3}: \texttt{byAngleDefineExtended(A, B, C, byblack, 3)(byblue, byred);} \ref{byAngleDefineExtended}.
+This angle style employs two optional colors and can be called by setting \texttt{style} argument \ref{byAngleDefine} to \texttt{3}. This is what the result of \texttt{byAngleDefineExtended(A, B, C, byred, 3)(byblue, byyellow);} looks like:\drawAngle{B} \ref{byAngleDefineExtended}.
 
 %https://archive.org/details/firstsixbooksofe00byrn/page/126/mode/2up
 
@@ -714,9 +843,39 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	Draws text labels for points on a polygon. Returns a picture of the labels.
 	
+	\defineNewPicture{
+	pair A, B, C, D;
+	D := (0, 0);
+	C := (1cm, 0);
+	B := (2cm, 0);
+	A := (1/2cm, 1cm);
+	byPolygonDefine(D, C, A)(byred);
+	byPolygonDefine(C, B, A)(byyellow);
+	}
+	
 	\texttt{POINTS\_LIST} — a comma-separated list of point names.
 	
-	\texttt{style} — specifies which points to omit. \texttt{0} to draw labels for all listed points, \texttt{1} to draw labels for all listed points, except for the ones at straight angles, \texttt{2} omits first and last points, \texttt{3} omits first point, \texttt{1} omits last point.
+	\texttt{style} — specifies which points to omit. \texttt{0} to draw labels for all listed points
+	\drawFromCurrentPicture{
+	draw byNamedPolygon(DCA,CBA);
+	draw byLabelsOnPolygon(A, B, C, D)(0, 0);
+	}, \texttt{1} to draw labels for all listed points, except for the ones at straight angles
+	\drawFromCurrentPicture{
+	draw byNamedPolygon(DCA,CBA);
+	draw byLabelsOnPolygon(A, B, C, D)(1, 0);
+	}, \texttt{2} omits first and last points
+	\drawFromCurrentPicture{
+	draw byNamedPolygon(DCA,CBA);
+	draw byLabelsOnPolygon(A, B, C, D)(2, 0);
+	}, \texttt{3} omits first point
+	\drawFromCurrentPicture{
+	draw byNamedPolygon(DCA,CBA);
+	draw byLabelsOnPolygon(A, B, C, D)(3, 0);
+	}, \texttt{4} omits last point
+	\drawFromCurrentPicture{
+	draw byNamedPolygon(DCA,CBA);
+	draw byLabelsOnPolygon(A, B, C, D)(4, 0);
+	}.
 	
 	\texttt{shift} — negative to move labels closer, positive to move labels farther.
 
