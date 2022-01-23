@@ -1,6 +1,13 @@
 \documentclass{ltxdoc}
 \usepackage{byrne}
 \usepackage{ccicons,bxtexlogo,listings,hyperref}
+\hypersetup{
+     colorlinks=true,
+     linkcolor=blue,
+     filecolor=blue,
+     citecolor = black,      
+     urlcolor=cyan,
+     }
 
 \lstset{
 language=MetaPost,
@@ -34,21 +41,20 @@ This document is distributed under CC-BY-SA 4.0 license
 
 \ccbysa 
 
-https://github.com/jemmybutton/byrne-latex
+\href{https://github.com/jemmybutton/byrne-latex}{https://github.com/jemmybutton/byrne-latex}
 
 \end{centering}
 
 \section{Introduction}
-Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams are colored and parts of these diagrams are directly incorporated into text.
+Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
 
 Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
 
-The \ConTeXt\ version's main goal was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of this toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
+The aforementioned \ConTeXt\ version's main goal was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of this toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
 
 \section{Requirements}
 
-This package works with \LuaLaTeX\ and requires \texttt{luamplib v2.23.0} or later. The document should contain \cs{usepackage\{byrne\}} in the preamble.
-
+This package works with \LuaLaTeX\ and requires \texttt{luamplib v2.23.0} or higher.
 \section{An example}
 
 \begin{minipage}{\textwidth}
@@ -74,8 +80,9 @@ draw byLabelsOnPolygon(A, B, C)(0, 0);
 
 In 
 \drawFromCurrentPicture[middle][triangleABC]{
+startAutoLabeling;
 draw byNamedLineSeq(0)(AB,BC,CA);
-draw byLabelsOnPolygon(A, B, C)(0, 0);
+stopAutoLabeling;
 } 
 the angle \drawAngle{A} 
 is a right angle, therefore \triangleABC 
@@ -89,7 +96,11 @@ The construction above is described like this:
 \vskip 1.5\baselineskip
 
 \begin{LaTeXCode}
+\usepackage{byrne}
+...
 \defineNewPicture{ % MetaPost code to describe the main diagram is placed inside
+\end{LaTeXCode}
+\begin{MetaPostCode}
   textLabels := true; % This turns text labels on
   pair A, B, C; 
   A := (0, 0);  
@@ -104,13 +115,19 @@ The construction above is described like this:
   byLineDefine(C, A, byyellow, 0, 0); 
   draw byNamedLineSeq(1)(AB,BC,CA); % Draws joint lines in sequence
   draw byLabelsOnPolygon(A, B, C)(0, 0); % Draws text labels
+\end{MetaPostCode}
+\begin{LaTeXCode}
 }                                   
 
 \drawCurrentPicture % Draws the diagram
 
 In 
 \drawFromCurrentPicture[middle][triangleABC]{ % Draws an image based 
+\end{LaTeXCode}
+\begin{MetaPostCode}
   draw byNamedLineSeq(0)(AB,BC,CA);           % on the last diagram
+\end{MetaPostCode}
+\begin{LaTeXCode}
 }
 the angle \drawAngle{A} is a right angle, therefore \triangleABC\ is
 a right-angled triangle. In it $\drawUnitLine{CB} > \drawUnitLine{AB}$ 
@@ -125,15 +142,15 @@ In the \METAPOST\ part:
 All 2D points are ordinary \METAPOST\ pairs and can be defined and manipulated as such. Normally every part of the diagram is first defined (e.g. \texttt{byAngleDefine} or \texttt{byLineDefine}) and then is drawn (e.g. \texttt{draw byNamedAngleResized...} or \texttt{draw byNamedLineSeq...}). Also, although Byrne's original book didn't include text labels at all, they are implemented in this package. Normally they are placed semi-manually in the main diagram (using functions like \texttt{byLabelsOnPolygon}) and mostly automatically in offspring pictures. By default they are turned off, and to turn them on \texttt{textLabels := true;} should be set.
 
 In the \LaTeX\ part: 
-The most general way to reference the main diagram is to use \cs{drawFromCurrentPicture}. It will process arbitrary \METAPOST\ code based on the main diagram's code and output an image. However, it would be too cumbersome to use this route every time, so a few shortcuts are in place. If you do need to process arbitrary code, you can give the picture a name (in the example it's ``triangleABC''). It will define a macro of the same name \cs{triangleABC} which will output the same image. For most common cases there are special macros which don't require you to write any \METAPOST\ code. For instance \cs{drawAngle} and \cs{drawUnitLine} allow you to call angles and lines simply by name. The names don't have to match the initial definition exactly. For instance, the angle in the example can be called ``A'', ``BAC'' or ``ABC'' interchangably, or the line can be called either ``BC'' or ``CB'', depending on your intentions.
+The most general way to reference main diagram is to use \cs{drawFromCurrentPicture}. It will process arbitrary \METAPOST\ code based on the main diagram's code and output an image. However, it would be too cumbersome to use this route every time, so a few shortcuts are in place. If you do need to process arbitrary code, you can give picture a name (in the example it's \texttt{triangleABC}). It will define a macro of the same name \cs{triangleABC} which will output the same image again. For most common cases there are special macros which don't require you to write any \METAPOST\ code. For instance \cs{drawAngle} and \cs{drawUnitLine} allow you to call angles and lines simply by name. The names don't have to match the initial definition exactly. For instance, the angle in the example can be called \texttt{A}, \texttt{BAC} or \texttt{ABC} interchangably, or the line can be called either \texttt{BC} or \texttt{CB}, depending on your intentions.
 
 For more examples you can look at the source code of the \href{https://github.com/jemmybutton/byrne-euclid/}{\ConTeXt\ version of Byrne's book.} This package shares syntax with it and code can be transferred to \LaTeX\ with minimal changes.
 
-The following reference is incomplete and will be updated in the future.
+The following reference is not complete and will be updated in the future.
 
 \section{\METAPOST\ part reference}
 
-\section{Variables and settings}
+\subsection{Variables and settings}
 
 \subsubsection{Variables}\label{Variable}
 	
@@ -211,8 +228,9 @@ The following reference is incomplete and will be updated in the future.
 
 	\texttt{rotationAngle} — global rotation for a section of code.
 	
-%startAutoLabeling
-%stopAutoLabeling
+\subsubsection{startAutoLabeling; ... \METAPOST\ code ... stopAutoLabeling}\label{startAutoLabeling}
+
+	Used to turn auto labeling for a section of code. Most of the drawing functions have auto labeling which is turned off by default. Sometimes it's handy to use it instead of labeling items by hand.
 
 %startOffspringPictureMode
 %stopOffspringPictureMode
@@ -277,19 +295,19 @@ The following reference is incomplete and will be updated in the future.
 		C :=  dir(0) scaled 1/4cm;
 		byLineDefine(A, B, byred, 0, 0);
 		byLineDefine(B,C, byyellow, 0, 0);
-		draw byNamedLineSeq(0)(AB,BC) scaled 2;
+		draw byNamedLineSeq(0)(BC,AB) scaled 2;
 	}
 		
 	Draws lines joined in sequence. Line joints look like this:\drawCurrentPicture. Returns a picture of the lines.
 	
 	\texttt{lineShift} — how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side%
 	\drawFromCurrentPicture[bottom]{
-	draw byNamedLineSeq(1)(AB,BC) scaled 2;
+	draw byNamedLineSeq(1)(BC,AB) scaled 2;
 	draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
 	}, 
 	\texttt{$-1$} is for one regular line thickness to the other side%
 	\drawFromCurrentPicture[bottom]{
-		draw byNamedLineSeq(-1)(AB,BC) scaled 2;
+		draw byNamedLineSeq(-1)(BC,AB) scaled 2;
 		draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
 	}.
 	
@@ -777,8 +795,7 @@ enddef;
 byAngleMacroName[3] := "byAngleMSectors";
 \end{MetaPostCode}
 
-This angle style employs two optional colors and can be called by setting \texttt{style} argument \ref{byAngleDefine} to \texttt{3}. This is what the result of \texttt{byAngleDefineExtended(A, B, C, byred, 3)(byblue, byyellow);} looks like:\drawAngle{B} \ref{byAngleDefineExtended}.
-
+This angle style employs two optional colors and can be called by setting \texttt{style} argument \ref{byAngleDefine} to \texttt{3}. This is what the result of \texttt{byAngleDefineExtended(A, B, C, byred, 3)(byblue, byyellow);} (\ref{byAngleDefineExtended}) looks like:\drawAngle{B}.
 %https://archive.org/details/firstsixbooksofe00byrn/page/126/mode/2up
 
 %\subsection{Arrows}
@@ -901,7 +918,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	\texttt{mainPictureScaleFactor} — scale factor for the main picture. \texttt{1} by default.
 	
-	\texttt{\METAPOST\ code} — actual \METAPOST\ code to describe the main picture. To have some sinppets of code always executed before and after the code for the main picture, define \cs{mpPre} and \cs{mpPost} macros respectively in the preamble of your document, like this:
+	\texttt{\METAPOST\ code} — actual \METAPOST\ code to describe the main picture. To have some sinppets of code always executed before and after the code for the main picture (e.g. to turn on text labels by default with \texttt{textLabels := true;}), define \cs{mpPre} and \cs{mpPost} macros respectively in the preamble of your document, like this:
 	
 \begin{LaTeXCode}
 \def\mpPre{...some MP code...}
@@ -919,7 +936,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 % \addToUndefineList
 
-\subsubsection{\textbackslash defineFromCurrentPicture\{verticalAlignment\} \{PictureName\} \{\METAPOST\ code\}}
+\subsubsection{\textbackslash defineFromCurrentPicture \{verticalAlignment\} \{PictureName\} \{\METAPOST\ code\}}
 
 	This macro is used to describe a diagram, based on the main diagram.
 
@@ -1003,18 +1020,38 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsubsection{\textbackslash drawRightAngle}
 
-	Draws a right angle.
+	Draws a right angle \drawRightAngle.
 
 \subsubsection{\textbackslash drawTwoRightAngles}
 
-	Draws two right angles.
+	Draws two right angles \drawTwoRightAngles.
 
 
-\subsubsection{\textbackslash drawAngle\{AngleName\}}
+\subsubsection{\textbackslash drawAngle\{AngleName\}}\label{drawAngle}
 
 	Draws an angle.
+	
+	\defineNewPicture{
+	pair A, B, C, D, E, O;
+	O := (0, 0);
+	A := (2cm, 0);
+	B := A rotated (360/5);
+	C := B rotated (360/5);
+	D := C rotated (360/5);
+	E := D rotated (360/5);
+	byAngleDefine(A, O, B, byred, 0);
+	byAngleDefine(B, O, C, byyellow, 0);
+	byAngleDefine(C, O, D, byblue, 0);
+	byAngleDefine(D, O, E, byblack, 0);
+	byAngleDefine(E, O, A, byblack, 1);
+	byLineDefine(A, O, byblack, 0, 0);
+	}
 
 	\texttt{AngleName} — name of the angle to reference in the main diagram. 
+	When just one letter is used, all the angles defined at this point will be drawn, e.g. \drawAngle{O}. When used to reference one single defined angle, the direction doesn't matter. 
+	E.g. \texttt{AOB} and \texttt{BOA} will return the same picture \drawAngle{AOB}. 
+	When used to reference an angle composed of several defined angles, the name sould be given counterclockwise. 
+	E.g. \texttt{\textbackslash drawAngle\{AOD\}} is \drawAngle{AOD} and \texttt{\textbackslash drawAngle\{DOA\}} is \drawAngle{DOA}.
 	
 	Can be called later using \texttt{\textbackslash angleAngleName}.
 	
@@ -1022,7 +1059,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 	Draws an angle and sections of its adjacent sides.
 
-	\texttt{AngleName} — name of the angle to reference in the main diagram. 
+	\texttt{AngleName} — the same as in \ref{drawAngle}.
 	
 	Can be called later using \texttt{\textbackslash anglewithsidesAngleName}.
 	
@@ -1082,7 +1119,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	Can be called later using \texttt{\textbackslash pointmPointName}. 
 
-\subsubsection{\textbackslash drawPointL[verticalAlignment][LinesToOmit]\{PointName\}}
+\subsubsection{\textbackslash drawPointL[verticalAlignment][LinesToOmit]\{PointName\}}\label{drawPointL}
 
 	Draws a point, depicted as line segments starting/ending in it.
 
@@ -1098,13 +1135,9 @@ Draws a text label for a point. Returns a picture of the label.
 
 	Draws a point, depicted as line segments starting/ending in it with a point mark if defined.
 
-	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
+	Arguments are the same as in \texttt{drawPointL} \ref{drawPointL}.
 	
-	\texttt{LinesToOmit} — a comma-separated list lines, segments of which not to draw. 
-	
-	\texttt{PointName} — name of the point to reference in the main diagram. 
-	
-	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointlPointNameMinusLinesToOmit}, otherwise — \texttt{\textbackslash pointlPointName}. 
+	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointPointNameMinusLinesToOmit}, otherwise — \texttt{\textbackslash pointPointName}. 
 
 %\drawMagnitude
 

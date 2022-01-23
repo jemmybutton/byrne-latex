@@ -278,11 +278,11 @@ end
 		{\global\def\plal{middle}}%
 		{\global\def\plal{#1}}%
 	\IfNoValueTF{#2}%
-		{\drawFromCurrentPicture[\plal][pointl#3]{
+		{\drawFromCurrentPicture[\plal][point#3]{
 		startAutoLabeling; draw byNamedPointLines(#3,""); stopAutoLabeling;
 		draw byNamedPointMark(#3);
 		}}%
-		{\drawFromCurrentPicture[\plal][pointl#3Minus#2]{
+		{\drawFromCurrentPicture[\plal][point#3Minus#2]{
 		startAutoLabeling; draw byNamedPointLines(#3,"#2"); stopAutoLabeling;
 		draw byNamedPointMark(#3);
 		}}%
