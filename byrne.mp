@@ -1490,7 +1490,7 @@ vardef byNamedPointMark (text pointsList) =
                 appendList(pL, str pN, 1, false);
                 draw byPointMarkRender(pN, getAttribute("point", "Color", str pN), getAttribute("point", "Style", str pN)) rotated globalRotation;
                 if (autoLabelingMode and textLabels):
-                    draw byTextLabel(pointLabel)(str pN, pN, 90, 2textLabelShift);
+                    draw byTextLabel(pointLabel)(str pN, pN, 90, 1/2pointMarkSize + textLabelShift);
                 fi;
             fi;
         endfor;
