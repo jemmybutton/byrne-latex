@@ -1490,7 +1490,7 @@ vardef byNamedPointMark (text pointsList) =
                 appendList(pL, str pN, 1, false);
                 draw byPointMarkRender(pN, getAttribute("point", "Color", str pN), getAttribute("point", "Style", str pN)) rotated globalRotation;
                 if (autoLabelingMode and textLabels):
-                    draw byTextLabel(pointLabel)(str pN, pN, 90, textLabelShift);
+                    draw byTextLabel(pointLabel)(str pN, pN, 90, 2textLabelShift);
                 fi;
             fi;
         endfor;
@@ -1507,11 +1507,12 @@ enddef;
 vardef byNamedPointLines (suffix pointName)(expr omitLines) =
 save linesList, lineNames, pointNames, distantEnd, distantEnds, n, no, distL, maxDist, maxDistEndA, maxDistEndB, a, angleL, minAngle, maxAngle, minAngleEndB, maxAngleEndA, maxAngleEndB, safeLine;
 string linesList, lineNames[], pointNames[];
-linesList := pointLinesList.pointName;
 pair distantEnd, distantEnds[];
 numeric n, no, distL, maxDist, maxDistEndA, maxDistEndB, a[], angleL, minAngle, maxAngle, minAngleEndB, maxAngleEndA, maxAngleEndB, safeLine;
 picture labelImage, linesImage;
 boolean omitLine[];
+if known pointLinesList.pointName:
+    linesList := pointLinesList.pointName;
     n := 0;
     no := 0;
     maxDist := 0;
@@ -1615,6 +1616,10 @@ boolean omitLine[];
             fi;
             );
     fi;
+else:
+    labelImage := image();
+    linesImage := image();
+fi;
     image(
         draw labelImage;
         % this thing is intended to make the overall picture symmetrical

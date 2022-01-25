@@ -122,10 +122,12 @@ The construction above is described like this:
 \drawCurrentPicture % Draws the diagram
 
 In 
-\drawFromCurrentPicture[middle][triangleABC]{ % Draws an image based 
+\drawFromCurrentPicture[middle][triangleABC]{ 
 \end{LaTeXCode}
 \begin{MetaPostCode}
-  draw byNamedLineSeq(0)(AB,BC,CA);           % on the last diagram
+  startAutoLabeling;
+  draw byNamedLineSeq(0)(AB,BC,CA);           
+  stopAutoLabeling;
 \end{MetaPostCode}
 \begin{LaTeXCode}
 }
@@ -666,7 +668,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{color} — angle color, of \texttt{color} type.
 	
-	\texttt{style} — angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. For more detains see \ref{AngleStyles}.
+	\texttt{style} — angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. For more detains see \ref{AngleStyles}. 
 
 %byConstructAngleArc
 %byIsArcClockwise
@@ -1113,7 +1115,21 @@ Draws a text label for a point. Returns a picture of the label.
 	
 \subsubsection{\textbackslash drawPointM\{PointName\}}
 
-	Draws a point, depicted as a small circle.
+	\defineNewPicture{
+	pair A, B, C, D;
+	A := (0, 0);
+	B := dir(15)*cm;
+	C := B rotated 120;
+	D := C rotated 120;
+	byLineDefine(A, B, byred, 0, 0);
+	byLineDefine(A, C, byyellow, 0, 0);
+	byLineDefine(A, D, byblue, 0, 0);
+	draw byNamedLine(AD);
+	draw byNamedLineSeq(0)(AB,AC);
+	draw byPointMark(A,  byblack, 1);
+	}	
+
+	Draws a point, depicted as a small circle \drawPointM{A}.
 	
 	\texttt{PointName} — name of the point to reference in the main diagram. 
 	
@@ -1121,7 +1137,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsubsection{\textbackslash drawPointL[verticalAlignment][LinesToOmit]\{PointName\}}\label{drawPointL}
 
-	Draws a point, depicted as line segments starting/ending in it.
+	Draws a point, depicted as line segments starting/ending in it \drawPointL{A}.
 
 	\texttt{verticalAlignment} — optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
 	
@@ -1133,7 +1149,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsubsection{\textbackslash drawPoint[verticalAlignment][LinesToOmit]\{PointName\}}
 
-	Draws a point, depicted as line segments starting/ending in it with a point mark if defined.
+	Draws a point, depicted as line segments starting/ending in it with a point mark if defined \drawPoint{A}.
 
 	Arguments are the same as in \texttt{drawPointL} \ref{drawPointL}.
 	
