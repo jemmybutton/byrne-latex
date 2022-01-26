@@ -212,7 +212,7 @@ end
 
 \def\drawAngle#1{\drawFromCurrentPicture[middle][angle#1]{startAutoLabeling;draw byNamedAngleWithDummySides(#1);stopAutoLabeling;}}
 
-\def\drawAngleWithSides#1{\drawFromCurrentPicture[middle][anglewithsides#1]{startAutoLabeling;draw byNamedAngleSides(#1)(AB,BC);stopAutoLabeling;}}
+\def\drawAngleWithSides#1{\drawFromCurrentPicture[middle][anglewithsides#1]{startAutoLabeling;draw byNamedAngleSides(#1)();stopAutoLabeling;}}
 
 \DeclareDocumentCommand{\drawPolygon}{o o m}{%
 	\IfNoValueTF{#1}%

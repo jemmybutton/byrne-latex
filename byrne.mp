@@ -2468,6 +2468,10 @@ else:
 fi;
 enddef;
 
+vardef byConsiderAngleRight(suffix angleName) =
+    setAttribute("angle", "ArcType", str angleName, 1);
+enddef;
+
 vardef byConstructAngleArc (suffix a, b, c)(expr s) =
     save p, d, cutTime, q;
     pair d;

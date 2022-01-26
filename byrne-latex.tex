@@ -170,7 +170,7 @@ The following reference is not complete and will be updated in the future.
 
 %ghostLines := true;
 
-	\texttt{autoRightAngles}~— whether to depict right angles using angles instead of arcs, set to \texttt{false} by default.
+	\texttt{autoRightAngles}\label{autoRightAngles}~— whether to depict right angles using angles instead of arcs, set to \texttt{false} by default.
 
 %omitDuplicateTextLabels := false;
 	
@@ -654,6 +654,25 @@ The following reference is not complete and will be updated in the future.
 	\texttt{color}~— angle color, of \texttt{color} type.
 	
 	\texttt{style}~— angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. For more detains see \ref{AngleStyles}. 
+	
+\subsubsection{byConsiderAngleRight(AngleName)}\label{byConsiderAngleRight}
+
+	\defineNewPicture{
+	textLabels := false;
+	pair A, B, C, A', B', C';
+	A := dir(60)*cm;
+	B := (0, 0);
+	C := dir(0)*cm;
+	A' := A shifted (2cm, 0);
+	B' := B shifted (2cm, 0);
+	C' := C shifted (2cm, 0);
+	byAngleDefine(A, B, C, byyellow, 0);
+	byAngleDefine(A', B', C', byyellow, 0);
+	byConsiderAngleRight(A'B'C');
+	}
+	Makes a defined angle look like an angle \drawAngle{A'B'C'} instead of a circle arc \drawAngle{ABC}, as right angles are often depicted. Useful if an angle is not actually right in the diagram, but is meant to be right or assumed to be right. To make all the right angles look like this automatically, you can set \texttt{autoRightAngles := true;}\ref{autoRightAngles}.
+	
+	\texttt{AngleName}~— name of the angle. 
 
 %byConstructAngleArc
 %byIsArcClockwise
@@ -805,6 +824,8 @@ This angle style employs two optional colors and can be called by setting \textt
 
 \subsection{Text labels}
 
+Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when you set \texttt{textLabels := true;} in the beggining of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
+
 %\subsubsection{byTextLabel(labelType, text, point, angle, distance)}\label{byTextLabel}
 %Draws a text label. Returns a picture of the label.
 
@@ -897,7 +918,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsection{General purpose}
 
-\subsubsection{\textbackslash defineNewPicture[offspringPictureScaleFactor] [mainPictureScaleFactor] \{\METAPOST\ code\}}
+\subsubsection{\textbackslash defineNewPicture[offspringPictureScaleFactor] [mainPictureScaleFactor] \{\METAPOST\ code\}}\label{defineNewPicture}
 
 	This macro is used to describe a main diagram.
 
