@@ -118,6 +118,36 @@ byDefaultAngleOptionalColor := white;
 
 linecap := butt;
 
+vardef typeOf (expr v) =
+    save determinedType;
+    string determinedType;
+    determinedType := "undefined";
+    if (boolean v):
+        determinedType := "boolean";
+    elseif (cmykcolor v):
+        determinedType := "cmykcolor";
+    elseif (color v):
+        determinedType := "color";
+    elseif (rgbcolor v):
+        determinedType := "rgbcolor";
+    elseif (numeric v):
+        determinedType := "numeric";
+    elseif (pair v):
+        determinedType := "pair";
+    elseif (path v):
+        determinedType := "path";
+    elseif (pen v):
+        determinedType := "pen";
+    elseif (picture v):
+        determinedType := "picture";
+    elseif (string v):
+        determinedType := "string";
+    elseif (transform v):
+        determinedType := "transform";
+    fi;
+    determinedType
+enddef;
+
 vardef sign (expr x) =
     if x > 0: 1 fi
     if x < 0: -1 fi
@@ -171,6 +201,25 @@ vardef selectOutlineColor@# =
     fi
 enddef;
 
+defineColor.oiBlack((0, 0, 0));
+defineColor.oiOrange((0.9,0.6,0));
+defineColor.oiSkyBlue((0.35,0.7,0.9));
+defineColor.oiGreen((0,0.6,0.5));
+defineColor.oiYellow((0.95,0.9,0.25));
+defineColor.oiBlue((0,0.45,0.7));
+defineColor.oiVermillion((0.8,0.4,0));
+defineColor.oiPurple((0.8,0.6,0.7));
+
+% CMYK variants
+%defineColor.oiBlack((0,0,0,1));
+%defineColor.oiOrange((0,0.5,1,0));
+%defineColor.oiSkyBlue((0.8,0,0,0));
+%defineColor.oiGreen((0.97,0,0.75,0));
+%defineColor.oiYellow((0.1,0.05,0.9,0));
+%defineColor.oiBlue((1,0.5,0,0));
+%defineColor.oiVermillion((0,0.8,1,0));
+%defineColor.oiPurple((0.1,0.7,0,0));
+
 vardef cycleval (expr v, l) =
     save rv;
     numeric rv;
@@ -184,36 +233,6 @@ vardef cycleval (expr v, l) =
         rv := 0;
     fi;
     rv
-enddef;
-
-vardef typeOf (expr v) =
-    save determinedType;
-    string determinedType;
-    determinedType := "undefined";
-    if (boolean v):
-        determinedType := "boolean";
-    elseif (cmykcolor v):
-        determinedType := "cmykcolor";
-    elseif (color v):
-        determinedType := "color";
-    elseif (rgbcolor v):
-        determinedType := "rgbcolor";
-    elseif (numeric v):
-        determinedType := "numeric";
-    elseif (pair v):
-        determinedType := "pair";
-    elseif (path v):
-        determinedType := "path";
-    elseif (pen v):
-        determinedType := "pen";
-    elseif (picture v):
-        determinedType := "picture";
-    elseif (string v):
-        determinedType := "string";
-    elseif (transform v):
-        determinedType := "transform";
-    fi;
-    determinedType
 enddef;
 
 vardef angleOpticalScale (expr v) =
@@ -2493,8 +2512,8 @@ vardef byConstructAngleArc (suffix a, b, c)(expr s) =
                 getAttribute("point", "XYZ", str c)
                 );
         fi;
-        cutTime1 := xpart((p0 scaled cm) intersectiontimes ((0, 0)--10[(0, 0), a - b]));
-        cutTime2 := xpart((p0 scaled cm) intersectiontimes ((0, 0)--10[(0, 0), c - b]));
+        cutTime1 := xpart((p0 scaled cm) intersectiontimes ((0, 0)--(unitvector(a - b) scaled 2cm)));
+        cutTime2 := xpart((p0 scaled cm) intersectiontimes ((0, 0)--(unitvector(c - b) scaled 2cm)));
         p1 := subpath (cutTime1, cutTime2) of p0;
         p2 := subpath (cutTime1 - length(p0), cutTime2) of p0;
         p3 := subpath (cutTime1 + length(p0), cutTime2) of p0;

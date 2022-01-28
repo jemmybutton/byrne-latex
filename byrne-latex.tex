@@ -1,6 +1,24 @@
+\begin{filecontents}{byrne-latex.bib}
+@book{Tufte90,
+  author = {Tufte, Edward R.},
+  isbn = {978-0-9613921-1-6},
+  publisher = {Graphics Press},
+  title = {Envisioning Information},
+  year = 1990
+}
+@misc{Okabi2008,
+  author = {Okabe, Masataka and Ito, Kei},
+  title = {Color Universal Design (CUD) How to make figures and presentations that are friendly to Colorblind people},
+  year = {2008},
+  howpublished = {\url{https://jfly.uni-koeln.de/color/}},
+  note = {2022-01-30}
+}
+\end{filecontents}
+
 \documentclass{ltxdoc}
 \usepackage{byrne}
 \usepackage{ccicons,bxtexlogo,listings,hyperref}
+%\usepackage{natbib}
 \hypersetup{
      colorlinks=true,
      linkcolor=blue,
@@ -183,7 +201,17 @@ The following reference is not complete and will be updated in the future.
 
 \subsubsection{defineColor.ColorName(color)}\label{defineColor}
 	
-	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined: \texttt{byred}, \texttt{byblue}, \texttt{byyellow}, \texttt{byblack}, \texttt{bygrey}.
+	\defineNewPicture{
+	textLabels := false;
+	pair A, B, C;
+	A := dir(60);
+	B := (0, 0);
+	C := dir(0);
+	forsuffixes s=byblack,byred,byblue,byyellow,oiBlack,oiOrange,oiSkyBlue,oiGreen,oiYellow,oiBlue,oiVermillion,oiPurple:
+		byAngleDefine.s(A, B, C,s, 0);
+	endfor;
+	}
+	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. These colors should be relatively well discernable by colorblind people. Also, eight colors from colorblind-friendly palette by Okabi and Ito \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}.
 
 	\texttt{ColorName}~— mandatory color name of \texttt{suffix type}.
 	
@@ -824,6 +852,8 @@ This angle style employs two optional colors and can be called by setting \textt
 
 \subsection{Text labels}
 
+There are no text labels in Byrne's book, but, as Edward Tufte points out in his 1990 book, adding small text labels can actually help speed recogintion of geometric elements \cite{Tufte90}. It's not clear whether it's indeed the case for the reader, but at the very least text labels provide the author with the means of linking source code with the rendered pages. Several functions listed below allow for adding text labels very similar to the ones suggested by Tufte.
+
 Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when you set \texttt{textLabels := true;} in the beggining of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
 
 %\subsubsection{byTextLabel(labelType, text, point, angle, distance)}\label{byTextLabel}
@@ -1176,5 +1206,8 @@ Draws a text label for a point. Returns a picture of the label.
 	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointPointNameMinusLinesToOmit}, otherwise~— \texttt{\textbackslash pointPointName}. 
 
 %\drawMagnitude
+
+\bibliographystyle{plain}
+\bibliography{byrne-latex}
 
 \end{document}
