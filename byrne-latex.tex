@@ -2,43 +2,39 @@
 @book{Byrne1847,
   author = {Byrne, Oliver},
   publisher = {William Pickering},
-  title = {The first six books of the elements of Euclid, in which coloured diagrams and symbols are used instead of letters for the greater ease of learners},
+  title = {{The first six books of the elements of Euclid, in which coloured diagrams and symbols are used instead of letters for the greater ease of learners}},
   year = 1847
 }
 @book{Tufte90,
   author = {Tufte, Edward R.},
   isbn = {978-0-9613921-1-6},
   publisher = {Graphics Press},
-  title = {Envisioning Information},
+  title = {{Envisioning Information}},
   year = 1990
 }
 @misc{Slyusarev2017,
   author = {Slyusarev, Sergey},
-  title = {MetaPost + ConTeXt rendition of Oliver Byrne's "The first six books of the Elements of Euclid"},
+  title = {{MetaPost + ConTeXt rendition of Oliver Byrne's "The first six books of the Elements of Euclid"}},
   year = {2017},
-  howpublished = {\url{https://github.com/jemmybutton/byrne-euclid}},
-  note = {2022-01-30}
+  howpublished = {\url{https://github.com/jemmybutton/byrne-euclid}}
 }
-@misc{Rougeux2019,
+@misc{Rougeux2018,
   author = {Rougeux, Nicholas},
-  title = {Byrne’s Euclid},
-  year = {2019},
-  howpublished = {\url{https://www.c82.net/euclid/}},
-  note = {2022-01-30}
+  title = {{Byrne’s Euclid}},
+  year = {2018},
+  howpublished = {\url{https://www.c82.net/euclid/}}
 }
 @misc{Okabi2008,
   author = {Okabe, Masataka and Ito, Kei},
-  title = {Color Universal Design (CUD) How to make figures and presentations that are friendly to Colorblind people},
+  title = {{Color Universal Design (CUD) How to make figures and presentations that are friendly to Colorblind people}},
   year = {2008},
-  howpublished = {\url{https://jfly.uni-koeln.de/color/}},
-  note = {2022-01-30}
+  howpublished = {\url{https://jfly.uni-koeln.de/color/}}
 }
 \end{filecontents}
 
 \documentclass{ltxdoc}
 \usepackage{byrne}
 \usepackage{ccicons,bxtexlogo,listings,hyperref}
-%\usepackage{natbib}
 \hypersetup{
      colorlinks=true,
      linkcolor=blue,
@@ -79,14 +75,14 @@ This document is distributed under CC-BY-SA 4.0 license
 \section{Introduction}
 Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''}\cite{Byrne1847} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
 
-Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub\cite{Slyusarev2017}, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux\cite{Rougeux2019} and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
+Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub\cite{Slyusarev2017}, in late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux\cite{Rougeux2018} and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three are very different in terms of approach and goals.
 
-The aforementioned \ConTeXt\ version's main goal was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of this toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
+The \ConTeXt\ version's main objective was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of the toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
 
 \section{Requirements}
 
 This package works with \LuaLaTeX\ and requires \texttt{luamplib v2.23.0} or higher.
-\section{An example}
+\section{Example}
 
 \begin{minipage}{\textwidth}
 \vskip 0.5\baselineskip
@@ -146,7 +142,6 @@ The construction above is described like this:
   draw byNamedLineSeq(1)(AB,BC,CA); % Draws joint lines in sequence
   draw byLabelsOnPolygon(A, B, C)(0, 0); % Draws text labels
 }                                   
-
 \drawCurrentPicture % Draws the diagram
 
 In 
@@ -165,14 +160,14 @@ and $\drawUnitLine{BC} > \drawUnitLine{AC}$.
 Several things to note here. 
 
 In the \METAPOST\ part: 
-All 2D points are ordinary \METAPOST\ pairs and can be defined and manipulated as such. Normally every part of the diagram is first defined (e.g. \texttt{byAngleDefine} or \texttt{byLineDefine}) and then is drawn (e.g. \texttt{draw byNamedAngleResized...} or \texttt{draw byNamedLineSeq...}). Also, although Byrne's original book didn't include text labels at all, they are implemented in this package. Normally they are placed semi-manually in the main diagram (using functions like \texttt{byLabelsOnPolygon}) and mostly automatically in offspring pictures. By default they are turned off, and to turn them on \texttt{textLabels := true;} should be set.
+All points are ordinary \METAPOST\ pairs and can be defined and manipulated as such. Normally every part of the diagram is first defined (e.g. \texttt{byAngleDefine} or \texttt{byLineDefine}) and then is drawn (e.g. \texttt{draw byNamedAngleResized...} or \texttt{draw byNamedLineSeq...}). Also, although Byrne didn't use text labels in his book, they are implemented in this package \ref{textlabels}. Normally they are placed semi-manually in the main diagram (using functions like \texttt{byLabelsOnPolygon}) and mostly automatically in offspring pictures. By default they are turned off, and to turn them on \texttt{textLabels := true;} should be set.
 
 In the \LaTeX\ part: 
-The most general way to reference main diagram is to use \cs{drawFromCurrentPicture}. It will process arbitrary \METAPOST\ code based on the main diagram's code and output an image. However, it would be too cumbersome to use this route every time, so a few shortcuts are in place. If you do need to process arbitrary code, you can give picture a name (in the example it's \texttt{triangleABC}). It will define a macro of the same name \cs{triangleABC} which will output the same image again. For most common cases there are special macros which don't require you to write any \METAPOST\ code. For instance \cs{drawAngle} and \cs{drawUnitLine} allow you to call angles and lines simply by name. The names don't have to match the initial definition exactly. For instance, the angle in the example can be called \texttt{A}, \texttt{BAC} or \texttt{ABC} interchangably, or the line can be called either \texttt{BC} or \texttt{CB}, depending on your intentions.
+The most general way to reference main diagram is to use \cs{drawFromCurrentPicture}. It will process arbitrary \METAPOST\ code based on the main diagram's code and output an image. However, it would be too cumbersome to use this route every time, so a few shortcuts are in place. If you do need to process arbitrary code, you can give picture a name (in the example it's \texttt{triangleABC}). It will define a macro of the same name \cs{triangleABC} which will output the same image again. For most common cases there are special macros which don't require you to write any \METAPOST\ code. For instance \cs{drawAngle} and \cs{drawUnitLine} allow you to call angles and lines simply by name. The names don't have to match the initial definition exactly. For instance, the angle in the example can be called \texttt{A}, \texttt{BAC} or \texttt{ABC} interchangeably, or the same line segment can be called either \texttt{BC} or \texttt{CB}.
 
-For more examples you can look at the source code of the \href{https://github.com/jemmybutton/byrne-euclid/}{\ConTeXt\ version of Byrne's book.} This package shares syntax with it and code can be transferred to \LaTeX\ with minimal changes.
+For more examples you can look at the source code of the \href{https://github.com/jemmybutton/byrne-euclid/}{\ConTeXt\ version of Byrne's book.} This package shares syntax with it and its code can be transferred to \LaTeX\ with minimal changes.
 
-The following reference is not complete and will be updated in the future.
+The following reference guide is not complete and will be updated in the future.
 
 \section{\METAPOST\ part reference}
 
@@ -234,11 +229,13 @@ The following reference is not complete and will be updated in the future.
 		byAngleDefine.s(A, B, C,s, 0);
 	endfor;
 	}
-	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. These colors should be relatively discernable by colorblind people. Also, eight colors from \href{https://jfly.uni-koeln.de/color/}{colorblind-friendly palette by Okabe and Ito} \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}.
+	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version.
 
 	\texttt{ColorName}~— mandatory color name of \texttt{suffix type}.
 	
 	\texttt{color}~— an actual calor, can be either of \texttt{color} type or of \texttt{cmykcolor} type.
+	
+	Some colors are predefined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. One obvious issue of any color coding is whether the colors are discernible by colorblind people. Byrne's colors should be mostly fine, but there are only foru of them. In case more colors are necessary, eight colors from \href{https://jfly.uni-koeln.de/color/}{colorblind-friendly palette by Okabe and Ito} \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}. Also text labels \ref{textlabels} are helpful as a secondary means of identification.
 
 %\subsubsection{selectOutlineColor.ColorName}\label{selectOutlineColor}
 	
@@ -454,7 +451,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{O}~— the center of the circle an arc is from, of \texttt{suffix} type (i.e., variable name should be provided).
 	
-	\texttt{begin, end}~— beginning and ending of the arc in eighths (in essence, arctimes of \texttt{fullcircle}). \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc. For instance, this
+	\texttt{begin, end}~— beginning and ending of the arc in eighths (in essence, \texttt{arctime} of \texttt{fullcircle}). \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc. For instance, this
 	\drawFromCurrentPicture{
 		draw byArcBE(A, 0, 3, 2/6cm, byblue, 0, 0, 1, 0);
 	}
@@ -665,7 +662,6 @@ The following reference is not complete and will be updated in the future.
 
 %byPolygonName
 
-
 \subsubsection{byNamedPolygon(POLYGONS\_LIST)}\label{byNamedPolygon}
 	
 	Draws polygons. Returns a picture of the polygons.
@@ -800,7 +796,7 @@ byAngleMacroName[0] := "byAngleMSolid";
 
 	Here \texttt{0} is the value of \texttt{sty} argument used in \texttt{byAngleDefine} \ref{byAngleDefine} and such to call this particular angle style.
 	
-	As a more practical example, in Byrne's book, in a couple of places for some reason he choses not to use arcs and sectors, but instead goes with unique angle designs. In order not to include these peculiarities into the main lib in the \ConTeXt\ version they were defined \textit{in situ}. Here's the definition from IV.III:
+	As a more practical example, in Byrne's book, in a couple of places for some reason he chooses not to use ordinary arcs and sectors, but instead goes with unique angle designs. In order not to include these peculiarities into the main lib in the \ConTeXt\ version they were defined \textit{in situ}. Here's the definition from IV.III:
 
 	\defineNewPicture{
 		vardef byAngleMSectors (expr angleArc, angleColor)(suffix angleOptionalColors) =
@@ -873,11 +869,11 @@ This angle style employs two optional colors and can be called by setting \textt
 %byMagnitudeDefine
 %byNamedMagnitude
 
-\subsection{Text labels}
+\subsection{Text labels}\label{textlabels}
 
-There are no text labels in Byrne's book, but, as Edward Tufte points out in his 1990 book, adding small text labels can actually help speed recogintion of geometric elements \cite{Tufte90}. It's not clear whether it's indeed the case for the reader, but at the very least text labels provide the author with the means of linking source code with the rendered pages. Several functions listed below allow for adding text labels very similar to the ones suggested by Tufte.
+There are no text labels in Byrne's book, but, as Edward Tufte points out in his 1990 book, adding small text labels can actually help speed recognition of geometric elements \cite{Tufte90}. It's not clear whether it's indeed the case for the reader, but at the very least text labels provide the author with the means of linking source code with the rendered pages. Several functions listed below allow for adding text labels very similar to the ones suggested by Tufte.
 
-Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when you set \texttt{textLabels := true;} in the beggining of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
+Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when you set \texttt{textLabels := true;} in the beginning of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
 
 %\subsubsection{byTextLabel(labelType, text, point, angle, distance)}\label{byTextLabel}
 %Draws a text label. Returns a picture of the label.
@@ -979,7 +975,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	\texttt{mainPictureScaleFactor}~— scale factor for the main picture. \texttt{1} by default.
 	
-	\texttt{\METAPOST\ code}~— actual \METAPOST\ code to describe the main picture. To have some sinppets of code always executed before and after the code for the main picture (e.g. to turn on text labels by default with \texttt{textLabels := true;}), define \cs{mpPre} and \cs{mpPost} macros respectively in the preamble of your document, like this:
+	\texttt{\METAPOST\ code}~— actual \METAPOST\ code to describe the main picture. To have some snippets of code always executed before and after the code for the main picture (e.g. to turn on text labels by default with \texttt{textLabels := true;}), define \cs{mpPre} and \cs{mpPost} macros respectively in the preamble of your document, like this:
 	
 \begin{lstlisting}
 \def\mpPre{...some \METAPOST\ code...}
