@@ -1,10 +1,30 @@
 \begin{filecontents}{byrne-latex.bib}
+@book{Byrne1847,
+  author = {Byrne, Oliver},
+  publisher = {William Pickering},
+  title = {The first six books of the elements of Euclid, in which coloured diagrams and symbols are used instead of letters for the greater ease of learners},
+  year = 1847
+}
 @book{Tufte90,
   author = {Tufte, Edward R.},
   isbn = {978-0-9613921-1-6},
   publisher = {Graphics Press},
   title = {Envisioning Information},
   year = 1990
+}
+@misc{Slyusarev2017,
+  author = {Slyusarev, Sergey},
+  title = {MetaPost + ConTeXt rendition of Oliver Byrne's "The first six books of the Elements of Euclid"},
+  year = {2017},
+  howpublished = {\url{https://github.com/jemmybutton/byrne-euclid}},
+  note = {2022-01-30}
+}
+@misc{Rougeux2019,
+  author = {Rougeux, Nicholas},
+  title = {Byrne’s Euclid},
+  year = {2019},
+  howpublished = {\url{https://www.c82.net/euclid/}},
+  note = {2022-01-30}
 }
 @misc{Okabi2008,
   author = {Okabe, Masataka and Ito, Kei},
@@ -57,9 +77,9 @@ This document is distributed under CC-BY-SA 4.0 license
 \end{centering}
 
 \section{Introduction}
-Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
+Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''}\cite{Byrne1847} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
 
-Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
+Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub\cite{Slyusarev2017}, in the late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux\cite{Rougeux2019} and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three seem to be very different in terms of approach and goals.
 
 The aforementioned \ConTeXt\ version's main goal was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of this toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
 
@@ -72,6 +92,7 @@ This package works with \LuaLaTeX\ and requires \texttt{luamplib v2.23.0} or hig
 \vskip 0.5\baselineskip
 \defineNewPicture{
 textLabels := true;
+angleSize := 1cm;
 pair A, B, C;
 A := (0, 0);
 B := (0, 2cm);
@@ -157,23 +178,25 @@ The following reference is not complete and will be updated in the future.
 
 \subsection{Variables and settings}
 
-\subsubsection{Variables}\label{Variable}
+\subsubsection{Variables}\label{Variables}
 	
 	There are several variables which control the looks and behaviour.
 	
-	\texttt{lineWidth}~— the width for regular lines, set to \texttt{2pt} by default.
+	\texttt{lineWidth}\label{lineWidth}~— the width for regular lines, set to \texttt{2pt} by default. Normally referenced as \texttt{0}.
 	
-	\texttt{lineWidthThin}~— the width for thin lines, set to \texttt{1pt} by default. 
+	\texttt{lineWidthThin}~— the width for thin lines, set to \texttt{1pt} by default. Normally referenced as \texttt{1}.
 	
-	\texttt{lineWidthHair}~— the width for superthin lines, set to \texttt{1/2pt} by default.
+	\texttt{lineWidthHair}~— the width for superthin lines, set to \texttt{1/2pt} by default. Normally referenced as \texttt{2}.
 	
-	\texttt{pointMarkSize}~— size of point marks, set to \texttt{4pt} by default.
+	\texttt{pointMarkSize}\label{pointMarkSize}~— size of point marks, set to \texttt{4pt} by default.
 	
-	\texttt{pointLinesSize}~— size for line segments used to depict points, set to \texttt{1/2cm} by default.
+	\texttt{pointLinesSize}\label{pointLinesSize}~— size for line segments used to depict points, set to \texttt{1/2cm} by default.
 
 	\texttt{defaultScaleFactor}~— global default scale factor, set to \texttt{1} by default.
+
+	\texttt{angleSize}\label{angleSize}~— angle arc radius, set to \texttt{1cm} by default.
 	
-	\texttt{angleScale}~— scale factor for angle arcs, set to \texttt{1} by default.
+	\texttt{angleScale}\label{angleScale}~— scale factor for angle arcs, set to \texttt{1} by default.
 
 	\texttt{globalRotation}~— angle to rotate the whole picture.
 
@@ -211,7 +234,7 @@ The following reference is not complete and will be updated in the future.
 		byAngleDefine.s(A, B, C,s, 0);
 	endfor;
 	}
-	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. These colors should be relatively well discernable by colorblind people. Also, eight colors from colorblind-friendly palette by Okabi and Ito \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}.
+	Defines a color. Colors can be defined as regular \METAPOST\ colors as well, this is just a shorthand version. Some colors are pre-defined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. These colors should be relatively discernable by colorblind people. Also, eight colors from \href{https://jfly.uni-koeln.de/color/}{colorblind-friendly palette by Okabe and Ito} \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}.
 
 	\texttt{ColorName}~— mandatory color name of \texttt{suffix type}.
 	
@@ -270,7 +293,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{dashed}~— is line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
 	
-	\texttt{thick}~— is line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	\texttt{thick}~— is line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 
 	\defineNewPicture{
 		pair A, B, C, D;
@@ -381,7 +404,7 @@ The following reference is not complete and will be updated in the future.
 
 \subsubsection{byPointLabelRemove(POINTS\_LIST)}\label{byPointLabelRemove}
 
-	Sets labels of multiple points to blank. Useful if text labels are turned on, but you don't want labels on certain points.
+	Sets text labels of multiple points to blank. Useful if text labels are turned on, but you don't want labels on certain points.
 
 	\texttt{POINTS\_LIST}~— a comma-separated list of point names.
 
@@ -400,7 +423,7 @@ The following reference is not complete and will be updated in the future.
 
 	\texttt{color}~— mark color, of \texttt{color} type.
 
-	\texttt{style}~— \texttt{0} for solid circle \drawPointM{A}, \texttt{1} for white circle with outline \drawPointM{B}.
+	\texttt{style}~— \texttt{0} for solid circle \drawPointM{A}, \texttt{1} for white circle with outline \drawPointM{B}. Mark size is controlled by \texttt{pointMarkSize} \ref{pointMarkSize}.
 		
 %byPointXYZDefine
 %byPointXYZEmpty
@@ -427,11 +450,11 @@ The following reference is not complete and will be updated in the future.
 		A := (0, 0);
 	}
 	
-	\texttt{ArcName}~— optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from point name, e.g. \texttt{O}.
+	\texttt{ArcName}~— optional arc name of \texttt{suffix type}. If no name is provided, it is being constructed from center point name, e.g. \texttt{O}.
 	
 	\texttt{O}~— the center of the circle an arc is from, of \texttt{suffix} type (i.e., variable name should be provided).
 	
-	\texttt{begin, end}~— beginning and ending of the arc in eighths. \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc. For instance, this
+	\texttt{begin, end}~— beginning and ending of the arc in eighths (in essence, arctimes of \texttt{fullcircle}). \texttt{0} for 3 o'clock, \texttt{2} for 12 o'clock etc. For instance, this
 	\drawFromCurrentPicture{
 		draw byArcBE(A, 0, 3, 2/6cm, byblue, 0, 0, 1, 0);
 	}
@@ -447,7 +470,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{dashed}~— is arc line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
 	
-	\texttt{thick}~— is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	\texttt{thick}~— is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 	
 	\texttt{shift}~— how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards
 	\drawFromCurrentPicture{
@@ -517,7 +540,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{dashed}~— is circle line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
 	
-	\texttt{thick}~— is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	\texttt{thick}~— is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 	
 	\texttt{shift}~— how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards
 	\drawFromCurrentPicture{
@@ -595,7 +618,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{dashed}~— is figure line dashed. \texttt{0} for solid line and \texttt{1} for dashed line.
 	
-	\texttt{thick}~— is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line.
+	\texttt{thick}~— is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 
 \subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigure}
 
@@ -659,9 +682,9 @@ The following reference is not complete and will be updated in the future.
 	\defineNewPicture{
 		textLabels := false;
 		pair A, B, C, A', B', C', A'', B'', C'';
-		A :=  dir(45) scaled 1/4cm;
+		A :=  dir(60);
 		B := (0, 0);
-		C :=  dir(0) scaled 1/4cm;
+		C :=  dir(0);
 		A' := A shifted (1cm, 0);
 		B' := B shifted (1cm, 0);
 		C' := C shifted (1cm, 0);
@@ -681,7 +704,7 @@ The following reference is not complete and will be updated in the future.
 	
 	\texttt{color}~— angle color, of \texttt{color} type.
 	
-	\texttt{style}~— angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. For more detains see \ref{AngleStyles}. 
+	\texttt{style}~— angle arc style. \texttt{0} for solid filled sector \drawAngle{B}, \texttt{1} for arc \drawAngle{B'}, \texttt{2} for dashed arc \drawAngle{B''}. Default arc radius is determined by \texttt{angleSize} \ref{angleSize}. It can be temporarily changed using \texttt{angleScale} \ref{angleScale}. You can also define custom angle styles \ref{AngleStyles}. 
 	
 \subsubsection{byConsiderAngleRight(AngleName)}\label{byConsiderAngleRight}
 
@@ -760,7 +783,7 @@ The following reference is not complete and will be updated in the future.
 vardef byAngleMSolid (expr angleArc, angleColor)(suffix AngleOptionalColors) =
     save p;
     path p;
-    p := angleArc scaled (angleScale*cm);
+    p := angleArc scaled (angleScale*angleSize);
     image(
         fill ((0, 0)--p--cycle) withcolor angleColor;
     )
@@ -785,13 +808,13 @@ byAngleMacroName[0] := "byAngleMSolid";
 		    path p[];
 		    p1 := (subpath(0, arctime (1/3arclength(angleArc)) of angleArc) 
 		    	of angleArc) 
-		    	scaled (angleScale*cm);
+		    	scaled (angleScale*angleSize);
 		    p2 := (subpath(arctime (1/3arclength(angleArc)) 
 		    	of angleArc, arctime(2/3arclength(angleArc)) of angleArc) of angleArc) 
-		    	scaled (angleScale*cm);
+		    	scaled (angleScale*angleSize);
 		    p3 := (subpath(arctime (2/3arclength(angleArc)) 
 		    	of angleArc, length(angleArc)) of angleArc) 
-		    	scaled (angleScale*cm);
+		    	scaled (angleScale*angleSize);
 		    image(
 		        fill ((0, 0)--p1--cycle) withcolor angleOptionalColors[0];
 		        fill ((0, 0)--p2--cycle) withcolor angleColor;
@@ -813,13 +836,13 @@ vardef byAngleMSectors (expr angleArc, angleColor)(suffix angleOptionalColors) =
     path p[];
     p1 := (subpath(0, arctime (1/3arclength(angleArc)) of angleArc) 
     	of angleArc) 
-    	scaled (angleScale*cm);
+    	scaled (angleScale*angleSize);
     p2 := (subpath(arctime (1/3arclength(angleArc)) 
     	of angleArc, arctime(2/3arclength(angleArc)) of angleArc) of angleArc) 
-    	scaled (angleScale*cm);
+    	scaled (angleScale*angleSize);
     p3 := (subpath(arctime (2/3arclength(angleArc)) 
     	of angleArc, length(angleArc)) of angleArc) 
-    	scaled (angleScale*cm);
+    	scaled (angleScale*angleSize);
     image(
         fill ((0, 0)--p1--cycle) withcolor angleOptionalColors[0];
         fill ((0, 0)--p2--cycle) withcolor angleColor;
@@ -1187,7 +1210,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsubsection{\textbackslash drawPointL[verticalAlignment][LinesToOmit]\{PointName\}}\label{drawPointL}
 
-	Draws a point, depicted as line segments starting/ending in it \drawPointL{A}. Only the lines which were actually drawn, not just defined, are used.
+	Draws a point, depicted as line segments starting/ending in it \drawPointL{A}. Only the lines which were actually drawn, not just defined, are used. Line segments' length is controlled by \texttt{pointLinesSize} \ref{pointLinesSize}.
 
 	\texttt{verticalAlignment}~— optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
 	
