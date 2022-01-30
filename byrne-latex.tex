@@ -24,7 +24,7 @@
   year = {2018},
   howpublished = {\url{https://www.c82.net/euclid/}}
 }
-@misc{Okabi2008,
+@misc{Okabe2008,
   author = {Okabe, Masataka and Ito, Kei},
   title = {{Color Universal Design (CUD) How to make figures and presentations that are friendly to Colorblind people}},
   year = {2008},
@@ -171,9 +171,9 @@ The following reference guide is not complete and will be updated in the future.
 
 \section{\METAPOST\ part reference}
 
-\subsection{Variables and settings}
+\subsection{Global variables and settings}
 
-\subsubsection{Variables}\label{Variables}
+\subsubsection{Global variables}\label{Variables}
 	
 	There are several variables which control the looks and behaviour.
 	
@@ -199,7 +199,8 @@ The following reference guide is not complete and will be updated in the future.
 
 	\texttt{rayExtension}~— length for a ray depiction, set to \texttt{1/3cm} by default.
 
-%	magnitudeScale := 5/18;
+%	magnitudeSize := 5/18cm;
+%	magnitudeScale := 1;
 %	magnitudeGap := 3/2lineWidth;
 	
 	\texttt{textLabels}~— whether to render text labels, set to \texttt{false} by default.
@@ -235,7 +236,7 @@ The following reference guide is not complete and will be updated in the future.
 	
 	\texttt{color}~— an actual calor, can be either of \texttt{color} type or of \texttt{cmykcolor} type.
 	
-	Some colors are predefined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. One obvious issue of any color coding is whether the colors are discernible by colorblind people. Byrne's colors should be mostly fine, but there are only foru of them. In case more colors are necessary, eight colors from \href{https://jfly.uni-koeln.de/color/}{colorblind-friendly palette by Okabe and Ito} \cite{Okabi2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}. Also text labels \ref{textlabels} are helpful as a secondary means of identification.
+	Some colors are predefined. Colors similar to the ones Byrne used for his book are: \texttt{byblack}\drawAngle{byblack}, \texttt{byred}\drawAngle{byred}, \texttt{byblue}\drawAngle{byblue}, \texttt{byyellow}\drawAngle{byyellow}. One obvious issue of any color coding is whether the colors are discernible by colorblind people. Byrne's colors should be mostly fine, but there are only foru of them. In case more colors are necessary, eight colors from \href{https://jfly.uni-koeln.de/color/}{colorblind-friendly palette by Okabe and Ito} \cite{Okabe2008} are defined: \texttt{oiBlack}\drawAngle{oiBlack}, \texttt{oiOrange}\drawAngle{oiOrange}, \texttt{oiSkyBlue}\drawAngle{oiSkyBlue}, \texttt{oiGreen}\drawAngle{oiGreen}, \texttt{oiYellow}\drawAngle{oiYellow}, \texttt{oiBlue}\drawAngle{oiBlue}, \texttt{oiVermillion}\drawAngle{oiVermillion}, \texttt{oiPurple}\drawAngle{oiPurple}. Also text labels \ref{textlabels} are helpful as a secondary means of identification.
 
 %\subsubsection{selectOutlineColor.ColorName}\label{selectOutlineColor}
 	
@@ -605,7 +606,7 @@ The following reference guide is not complete and will be updated in the future.
 
 \subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigureDefine}
 	
-	Defines an arbitrary figure. Returns nothing.
+	Defines an arbitrary figure (basically, any path). Returns nothing.
 	
 	\texttt{ArbitraryFigureName}~— optional figure name of \texttt{suffix type}. If no name is provided, \texttt{anArbitraryFigure} is used for a name.
 	
@@ -873,7 +874,7 @@ This angle style employs two optional colors and can be called by setting \textt
 
 There are no text labels in Byrne's book, but, as Edward Tufte points out in his 1990 book, adding small text labels can actually help speed recognition of geometric elements \cite{Tufte90}. It's not clear whether it's indeed the case for the reader, but at the very least text labels provide the author with the means of linking source code with the rendered pages. Several functions listed below allow for adding text labels very similar to the ones suggested by Tufte.
 
-Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when you set \texttt{textLabels := true;} in the beginning of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
+Text labels are turned off by default. As a result, simply adding code for text labels won't make them visible. They only appear when \texttt{textLabels := true;} is set in the beginning of a main picture or globally by defining \texttt{\textbackslash def\textbackslash\{...\} mpPre} \ref{defineNewPicture}. Text labels don't always have to be added manually, most elements can do auto labeling \ref{startAutoLabeling} which is intended to work with standalone angles, polygons, etc. 
 
 %\subsubsection{byTextLabel(labelType, text, point, angle, distance)}\label{byTextLabel}
 %Draws a text label. Returns a picture of the label.
@@ -941,11 +942,11 @@ Draws a text label for a point. Returns a picture of the label.
 	\drawFromCurrentPicture{
 	draw byNamedPolygon(DCA,CBA);
 	draw byLabelsOnPolygon(A, B, C, D)(2, 0);
-	}, \texttt{3} omits first point
+	}, \texttt{3} omits the first point
 	\drawFromCurrentPicture{
 	draw byNamedPolygon(DCA,CBA);
 	draw byLabelsOnPolygon(A, B, C, D)(3, 0);
-	}, \texttt{4} omits last point
+	}, \texttt{4} omits the last point
 	\drawFromCurrentPicture{
 	draw byNamedPolygon(DCA,CBA);
 	draw byLabelsOnPolygon(A, B, C, D)(4, 0);
@@ -1075,14 +1076,13 @@ Draws a text label for a point. Returns a picture of the label.
 
 %\drawProportionalIndLine
 
-\subsubsection{\textbackslash drawRightAngle}
-
-	Draws a right angle \drawRightAngle.
-
-\subsubsection{\textbackslash drawTwoRightAngles}
-
-	Draws two right angles \drawTwoRightAngles.
-
+\subsubsection{\textbackslash drawRightAngle, \textbackslash drawTwoRightAngles}
+	\defineNewPicture{textLabels := false;}
+	Draws a right angle \drawRightAngle\ and two right angles \drawTwoRightAngles\ respectively. 
+	
+	More broadly, following generic right angles are defined: \texttt{rightAngleNE} \drawAngle{rightAngleNE},  \texttt{rightAngleES} \drawAngle{rightAngleES},  \texttt{rightAngleSW} \drawAngle{rightAngleSW},  \texttt{rightAngleWN} \drawAngle{rightAngleWN}. 
+	
+	If you choose to go with angles instead of arcs for right angles (\ref{autoRightAngles}, \ref{byConsiderAngleRight}), adding \texttt{autoRightAngles := true;} to \texttt{\textbackslash mpPre} \ref{defineNewPicture} won't change the appearance of these angles, since they are defined before \texttt{\textbackslash mpPre} commands are executed. Instead, these angles should be redefined. There's a special command for this purpose: \texttt{byDefineGenericRightAngles(true);} where \texttt{true} tells this command to run \texttt{byConsiderAngleRight} \ref{byConsiderAngleRight} for each of the generic right angles.
 
 \subsubsection{\textbackslash drawAngle\{AngleName\}}\label{drawAngle}
 
