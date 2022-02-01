@@ -336,12 +336,12 @@ The following reference guide is not complete and will be updated in the future.
 		
 	Draws lines joined in sequence. Line joints look like this:\drawCurrentPicture. Returns a picture of the lines.
 	
-	\texttt{lineShift}~— how much the lines are shifted perpendicular lines' axis. \texttt{$1$} is for one regular line thickness to one side%
+	\texttt{lineShift}~— how much the lines are shifted perpendicular lines' axis. \texttt{1} is for one regular line thickness to one side%
 	\drawFromCurrentPicture[bottom]{
 	draw byNamedLineSeq(1)(BC,AB) scaled 2;
 	draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
 	}, 
-	\texttt{$-1$} is for one regular line thickness to the other side%
+	\texttt{-1} is for one regular line thickness to the other side%
 	\drawFromCurrentPicture[bottom]{
 		draw byNamedLineSeq(-1)(BC,AB) scaled 2;
 		draw (A--B--C) scaled 2 withpen pencircle scaled 1/2pt;
@@ -470,11 +470,11 @@ The following reference guide is not complete and will be updated in the future.
 	
 	\texttt{thick}~— is arc line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 	
-	\texttt{shift}~— how much arc line is shifted. \texttt{$1$} is for one regular line thickness outwards
+	\texttt{shift}~— how much arc line is shifted. \texttt{1} is for one regular line thickness outwards
 	\drawFromCurrentPicture{
 		draw byArcBE(A, 1/2, 7/2, 1/6cm, byyellow, 0, 0, 1, 0) scaled 2;
 		draw (subpath (1/2, 7/2) of (fullcircle scaled 4/6cm)) withpen pencircle scaled 1/2pt;
-	}, \texttt{$-1$} is for one regular line thickness inwards
+	}, \texttt{-1} is for one regular line thickness inwards
 	\drawFromCurrentPicture{
 		draw byArcBE(A, 1/2, 7/2, 1/6cm, byyellow, 0, 0, -1, 0) scaled 2;
 		draw (subpath (1/2, 7/2) of (fullcircle scaled 4/6cm)) withpen pencircle scaled 1/2pt;
@@ -540,12 +540,12 @@ The following reference guide is not complete and will be updated in the future.
 	
 	\texttt{thick}~— is circle line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 	
-	\texttt{shift}~— how much circle line is shifted. \texttt{$1$} is for one regular line thickness outwards
+	\texttt{shift}~— how much circle line is shifted. \texttt{1} is for one regular line thickness outwards
 	\drawFromCurrentPicture{
 		byCircleDefineFree((0,0), 1/8cm, byyellow, 0, 0, 1);
 		draw byNamedCircle(aCircle) scaled 2;
 		draw fullcircle scaled 1/2cm;
-	}, \texttt{$-1$} is for one regular line thickness inwards
+	}, \texttt{-1} is for one regular line thickness inwards
 	\drawFromCurrentPicture{
 		byCircleDefineFree((0,0), 1/8cm, byyellow, 0, 0, -1);
 		draw byNamedCircle(aCircle) scaled 2;

@@ -47,8 +47,8 @@ end
 	\begin{mplibcode}[\currentInstance]%
 		picture instanceMainPicture;
 		input byrne;
+		\mpPre
 		instanceMainPicture := image(
-			\mpPre
 			startMainPictureMode;
 			projectionAngle := (0, 0, 0);
 			linecap := butt;
@@ -58,8 +58,8 @@ end
 			generateAngleSynonyms;
 			generateLineSynonyms;
 			stopMainPictureMode;
-			\mpPost
 		);
+		\mpPost
 	\end{mplibcode}%
 	}\global\addToUndefineList{#2}%
 }
