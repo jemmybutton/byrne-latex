@@ -604,7 +604,7 @@ The following reference guide is not complete and will be updated in the future.
 
 \subsection{Arbitraty figures}
 
-\subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigureDefine}
+\subsubsection{byArbitraryFigureDefine.ArbitraryFigureName(figurePath, col\-or, dashed, thick)}\label{byArbitraryFigureDefine}
 	
 	Defines an arbitrary figure (basically, any path). Returns nothing.
 	
@@ -618,7 +618,7 @@ The following reference guide is not complete and will be updated in the future.
 	
 	\texttt{thick}~— is figure line thick. \texttt{0} for regular line and \texttt{1} for thin line \ref{lineWidth}.
 
-\subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dashed, thick)}\label{byArbitraryFigure}
+\subsubsection{byArbitraryFigure.ArbitraryFigureName(figurePath, color, dash\-ed, thick)}\label{byArbitraryFigure}
 
 	Defines an arbitrary figure. Returns nothing.
 	
@@ -740,7 +740,7 @@ The following reference guide is not complete and will be updated in the future.
 	
 	\texttt{OPTIONAL\_COLORS\_LIST}~— a comma-separated list of optional color names. See \ref{AngleStyles} for details.
 	
-\subsubsection{byAngleExtended.AngleName(A, B, C, color, style)(OPTIONAL\_COLORS\_LIST)}\label{byAngleExtended}
+\subsubsection{byAngleExtended.AngleName(A, B, C, color, style)(OPTION\-AL\_COLORS\_LIST)}\label{byAngleExtended}
 
 	Defines and draws an angle based on three points. Returns a picture of the angle.
 	
@@ -968,7 +968,11 @@ Draws a text label for a point. Returns a picture of the label.
 
 \subsection{General purpose}
 
-\subsubsection{\textbackslash defineNewPicture[offspringPictureScaleFactor] [mainPictureScaleFactor] \{\METAPOST\ code\}}\label{defineNewPicture}
+\sloppy
+
+\subsubsection{\textbackslash defineNewPicture [offspringPicture\-Sca\-leFactor] [mainPicture\-Sca\-le\-Factor] \{\METAPOST\ code\}}\label{defineNewPicture}
+
+\fussy 
 
 	This macro is used to describe a main diagram.
 
@@ -994,7 +998,11 @@ Draws a text label for a point. Returns a picture of the label.
 
 % \addToUndefineList
 
+\sloppy
+
 \subsubsection{\textbackslash defineFromCurrentPicture \{verticalAlignment\} \{PictureName\} \{\METAPOST\ code\}}
+
+\fussy
 
 	This macro is used to describe a diagram, based on the main diagram.
 
@@ -1006,8 +1014,12 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	Can be drawn using \texttt{\textbackslash PictureName}.
 	
-\subsubsection{\textbackslash drawFromCurrentPicture[verticalAlignment] [PictureName] \{\METAPOST\ code\}}
+\sloppy
 
+\subsubsection{\textbackslash drawFromCurrentPicture [verticalAlignment] [PictureName] \{\METAPOST\nolinebreak\ code\}}
+ 
+ \fussy
+  
 	This macro is used to describe and draw a diagram, based on the main diagram.
 
 	\texttt{verticalAlignment}~— optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
@@ -1134,7 +1146,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	Can be called later using \texttt{\textbackslash anglewithsidesAngleName}.
 	
-\subsubsection{\textbackslash drawPolygon[verticalAlignment][PolygonNewName]\{PolygonName\}}
+\subsubsection{\textbackslash drawPolygon[verticalAlignment][PolygonNewName] \{Poly\-gon\-Na\-me\}}
 
 	Draws a polygon.
 
@@ -1214,7 +1226,7 @@ Draws a text label for a point. Returns a picture of the label.
 	
 	\texttt{PointName}~— name of the point to reference in the main diagram. 
 	
-	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointlPointNameMinusLinesToOmit}, otherwise~— \texttt{\textbackslash pointlPointName}. 
+	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointl\-Point\-Name\-Minus\-Lines\-To\-Omit}, otherwise~— \texttt{\textbackslash pointlPointName}. 
 
 \subsubsection{\textbackslash drawPoint[verticalAlignment][LinesToOmit]\{PointName\}}
 
@@ -1222,7 +1234,7 @@ Draws a text label for a point. Returns a picture of the label.
 
 	Arguments are the same as in \texttt{drawPointL} \ref{drawPointL}.
 	
-	If a list of lines to omit is given, can be called later using \texttt{\textbackslash pointPointNameMinusLinesToOmit}, otherwise~— \texttt{\textbackslash pointPointName}. 
+	If a list of lines to omit is given, can be called later using \texttt{\textbackslash point\-Point\-Name\-Minus\-Lines\-To\-Omit}, otherwise~— \texttt{\textbackslash pointPointName}. 
 
 %\drawMagnitude
 
