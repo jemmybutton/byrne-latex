@@ -2504,7 +2504,7 @@ vardef byConstructAngleArc (suffix a, b, c)(expr s) =
         d := (unitvector(a-c) rotated 90);
     fi;
     if (s = 0):
-        p0 := fullcircle;
+        p0 := fullcircle rotated -angle(a-b);
         if (attributeExists("point", "XYZ", str a)
             and attributeExists("point", "XYZ", str b)
             and attributeExists("point", "XYZ", str c)):
