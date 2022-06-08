@@ -243,11 +243,11 @@ end
 		{\global\def\plal{middle}}%
 		{\global\def\plal{#1}}%
 	\IfNoValueTF{#2}%
-		{\drawFromCurrentPicture[\plal][arc#3]{startAutoLabeling;draw byNamedArc(#3);stopAutoLabeling;}}%
+		{\drawFromCurrentPicture[\plal][arc#3]{startAutoLabeling;draw byNamedArcSeq(0)(#3);stopAutoLabeling;}}%
 		{\drawFromCurrentPicture[\plal][arc#3]{
 		startAutoLabeling;
 		startTempScale(#2);
-		draw byNamedArc(#3);
+		draw byNamedArcSeq(0)(#3);
 		stopTempScale;
 		stopAutoLabeling;
 		}}%
