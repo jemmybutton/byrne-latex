@@ -1753,12 +1753,12 @@ vardef byArcRender (expr o, b, e, r, sr, pv, col, dp, th, dpt, s, et) =
     image(
         srCircle := byCirclePathGenerate(sr, pv);
         currentLineWidth := lineThickness(th);
-        p0 := ((subpath (b, e) of srCircle) scaled (r*scaleFactor + lineWidth*s + lineWidth)) shifted (o*scaleFactor);
+        p0 := ((subpath (b, e) of srCircle) scaled (r*scaleFactor + 2lineWidth*s + lineWidth)) shifted (o*scaleFactor);
         p1 := ((subpath (b, e) of srCircle) scaled (r*scaleFactor)) shifted (o*scaleFactor);
-        p2 := (srCircle scaled (r*scaleFactor + lineWidth*s + lineWidth)) shifted (o*scaleFactor);
-        p3 := ((subpath (b, e) of srCircle) scaled (r*scaleFactor + lineWidth*s)) shifted (o*scaleFactor);
-        p4 := ((subpath (b + sign(b-e)*1/16, b) of srCircle) scaled (r*scaleFactor + lineWidth*s)) shifted (o*scaleFactor);
-        p5 := ((subpath (e, e + sign(e-b)*1/16) of srCircle) scaled (r*scaleFactor + lineWidth*s)) shifted (o*scaleFactor);
+        p2 := (srCircle scaled (r*scaleFactor + 2lineWidth*s + lineWidth)) shifted (o*scaleFactor);
+        p3 := ((subpath (b, e) of srCircle) scaled (r*scaleFactor + 2lineWidth*s)) shifted (o*scaleFactor);
+        p4 := ((subpath (b + sign(b-e)*1/16, b) of srCircle) scaled (r*scaleFactor + 2lineWidth*s)) shifted (o*scaleFactor);
+        p5 := ((subpath (e, e + sign(e-b)*1/16) of srCircle) scaled (r*scaleFactor + 2lineWidth*s)) shifted (o*scaleFactor);
         q := image(
             draw p3 withpen pencircle scaled currentLineWidth withcolor white;
             draw p3 withpen pencircle scaled currentLineWidth withcolor col if (dp > 0): dashed byDashPattern(arclength(p3), dp, dpt) fi;
@@ -1874,9 +1874,7 @@ vardef byNamedArcSeq (expr s)(text arcslist) =
                             (point getAttribute("arc", "Begin", str aNi) of fullcircle) -
                             (point getAttribute("arc", "End", str aNj) of fullcircle)
                             ) < 1/100):
-                        if getAttribute("arc", "Dashed", str aNj) = 0:
-                            dpt[i] := dpt[i] + 2;
-                        fi;
+                        dpt[i] := dpt[i] + 2;
                     fi;
                     if (abs(
                             (point getAttribute("arc", "End", str aNi) of fullcircle) -
@@ -1884,8 +1882,6 @@ vardef byNamedArcSeq (expr s)(text arcslist) =
                             ) < 1/100):
                         if getAttribute("arc", "Dashed", str aNj) = 0:
                             dpt[i] := dpt[i] + 1;
-                        else:
-                            dpt[i] := dpt[i] + 2;
                         fi;
                     fi;
                 fi;
