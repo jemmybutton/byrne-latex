@@ -76,7 +76,7 @@ end
 % \addToUndefineList. \undefineList is thus generated command, that, once executed,
 % undefines everything that was appended to it with \addToUndefineList.
 
-\def\unmarkPictAsReady#1{\expandafter\let\csname #1\endcsname\@undefined}
+\def\unmarkPictAsReady#1{\global\expandafter\let\csname #1\endcsname\@undefined}
 
 \def\addToUndefineList#1{\expandafter\def\expandafter\undefineList\expandafter{\undefineList \unmarkPictAsReady{#1}}}
 
