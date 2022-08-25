@@ -16,8 +16,6 @@
 \newif\ifCreateNewInstanceForPicture
 \CreateNewInstanceForPicturetrue
 
-\def\undefineList{}
-
 \directlua{
 function byFormatImageName(s)
 	local resultingName = s:gsub ("," , "")
@@ -35,8 +33,6 @@ end
 	\IfNoValueTF{#2}%
 		{\global\def\sfB{defaultScaleFactor}}%
 		{\global\def\sfB{#2}}%
-	\undefineList%
-	\def\undefineList{}%
 	\ifCreateNewInstanceForPicture%
 		\global\advance \mpInst by 1%
 		\global\def\currentInstance{byInstance\the\mpInst}%
@@ -61,7 +57,7 @@ end
 		);
 		\mpPost
 	\end{mplibcode}%
-	}\global\addToUndefineList{#2}%
+	}%
 }
 
 \def\drawImageFromCurrentInstance#1{
@@ -69,19 +65,6 @@ end
 		draw #1;
 	\end{mplibcode}%
 }
-
-% Every time some simple picture is drawn, new macro is defined
-% with \markPictAsReady. If macro is defined, predefined picture is used.
-% Every time new picture is added, instructions to undefine it are added with
-% \addToUndefineList. \undefineList is thus generated command, that, once executed,
-% undefines everything that was appended to it with \addToUndefineList.
-
-\def\unmarkPictAsReady#1{\global\expandafter\let\csname #1\endcsname\@undefined}
-
-\def\addToUndefineList#1{\expandafter\def\expandafter\undefineList\expandafter{\undefineList \unmarkPictAsReady{#1}}}
-
-\def\undefineList{}
-\addToUndefineList{lastPicture}
 
 % When larger picture is defined, we can visualize its parts with \drawFromCurrentPicture
 % First (optional) argument is for picture's vertical alignment relative to the string
@@ -105,7 +88,9 @@ end
 		);
 	\end{mplibcode}%
 \global\def\lastPict{#2}%
-\global\expandafter\edef\csname\lastPict\endcsname{{\noexpand\drawDefinedPicture{\expandafter\lastPict}{\expandafter#1}}}}
+\global\expandafter\edef\csname\lastPict\endcsname{{\noexpand\drawDefinedPicture{\expandafter\lastPict}{\expandafter#1}}}%
+\global\expandafter\edef\csname instanceNameFor\lastPict\endcsname{{\currentInstance}}%
+}
 
 \DeclareDocumentCommand{\drawFromCurrentPicture}{o o m}{%
 	\IfNoValueTF{#1}%
@@ -113,11 +98,11 @@ end
 		{\global\def\currentInlinePicturePlacement{#1}}%
 	\IfNoValueTF{#2}%
 		{\defineFromCurrentPicture{\currentInlinePicturePlacement}{lastPicture}{#3}}%
-		{\expandafter\ifx\csname #2\endcsname\relax%
-				\defineFromCurrentPicture{\currentInlinePicturePlacement}{#2}{#3}%
-				\global\addToUndefineList{#2}%
-			\else%
+		{\expandafter\ifx\csname instanceNameFor#2\endcsname\currentInstance%
 				\global\def\lastPict{#2}%
+
+			\else%
+				\defineFromCurrentPicture{\currentInlinePicturePlacement}{#2}{#3}%
 			\fi}%
 	\csname\lastPict\endcsname%
 }
