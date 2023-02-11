@@ -53,7 +53,7 @@ basicstyle=\ttfamily\scriptsize
 \def\mpPre{textLabels := true;}
 
 \author{Sergey Slyusarev}
-\title{``Byrne'' v. 0.2.2 package for \METAPOST\ and \LaTeX}
+\title{``Byrne'' v. 0.2.4 package for \METAPOST\ and \LaTeX}
 
 \begin{document}
 \maketitle
@@ -101,7 +101,7 @@ byLineDefine(A, B, byred, 0, 0);
 byLineDefine(B, C, byblue, 0, 0);   
 byLineDefine(C, A, byyellow, 0, 0); 
 draw byNamedLineSeq(0)(AB,BC,CA);
-draw byLabelsOnPolygon(A, B, C)(0, 0);
+draw byLabelsOnPolygon(A, B, C)(ALL_LABELS, 0);
 }
 ~\hfill\drawCurrentPicture\hfill~
 \vskip \baselineskip

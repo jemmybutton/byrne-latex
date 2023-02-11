@@ -1,7 +1,7 @@
-%    byrne-euclid 0.2.3
+%    byrne-euclid 0.2.4
 %    MetaPost library that implements most of the graphical
 %    features present in Oliver Byrne's version of Euclid's "Elements"
-%    Copyright 2022 Sergey Slyusarev
+%    Copyright 2023 Sergey Slyusarev
 %
 %    This program is free software: you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,31 @@ magnitudeScale := 1;
 magnitudeGap := 3/2lineWidth;
 markLength := 3lineWidth;
 rayExtension := 1/3cm;
+
+%
+% Some symbolic constants for better readability
+%
+
+SOLID_LINE := 0;
+DASHED_LINE := 1;
+
+SOLID_SECTOR := 0;
+ARC_SECTOR := 1;
+DASHED_ARC_SECTOR := 2;
+
+ALL_LABELS := 0;
+OMIT_LABELS_AT_STRAIGHT_ANGLES := 1;
+OMIT_FIRST_AND_LAST_LABEL := 2;
+OMIT_FIRST_LABEL := 3;
+OMIT_LAST_LABEL := 4;
+
+REGULAR_WIDTH := 0;
+THIN_WIDTH := 1;
+HAIR_WIDTH := 2;
+
+%
+% Some common settings
+%
 
 boolean textLabels, ghostLines, autoRightAngles, omitDuplicateTextLabels, autoLabelingMode, mainPictureMode;
 
@@ -1143,7 +1168,7 @@ vardef byNamedLineSeq (expr s)(text linesListRaw) =
                 pointNames := substring (0, length(pointNames)-2) of pointNames;
             fi;
             if (textLabels and autoLabelingMode):
-                draw byLabelsOnPolygon(scantokens pointNames)(1, s);
+                draw byLabelsOnPolygon(scantokens pointNames)(OMIT_LABELS_AT_STRAIGHT_ANGLES, s);
             fi;
         else:
             forsuffixes lN=scantokens(linesList):
@@ -1153,7 +1178,7 @@ vardef byNamedLineSeq (expr s)(text linesListRaw) =
                     scantokens(getAttribute("line", "EndBName", str lN)),
                     0, 0, 0, -s)(lN);
                 if (textLabels and autoLabelingMode):
-                    draw byLabelsOnPolygon(scantokens (getAttribute("line", "EndAName", str lN) & ", " & getAttribute("line", "EndBName", str lN)))(1, s);
+                    draw byLabelsOnPolygon(scantokens (getAttribute("line", "EndAName", str lN) & ", " & getAttribute("line", "EndBName", str lN)))(OMIT_LABELS_AT_STRAIGHT_ANGLES, s);
                 fi;
             endfor;
         fi;
@@ -1698,7 +1723,7 @@ if known pointLinesList.pointName:
                 );
         labelImage := image(
             if (textLabels):
-                draw byLabelsOnPolygon(scantokens(pointNames[maxAngleEndA]),pointName,scantokens(pointNames[maxAngleEndB]))(2, 0);
+                draw byLabelsOnPolygon(scantokens(pointNames[maxAngleEndA]),pointName,scantokens(pointNames[maxAngleEndB]))(OMIT_FIRST_LABEL + OMIT_LAST_LABEL, 0);
             fi;
             );
     else:
@@ -2273,7 +2298,7 @@ vardef byNamedArbitraryCurve (text curvesList) =
                     getAttribute("arbitraryCurve", "Thin", str cN)) rotated globalRotation;
             if (autoLabelingMode):
                 if (textLabels):
-                    draw byLabelsOnPolygon(scantokens(getAttribute("arbitraryCurve", "PointsList", str cN)), noPoint)(1, 0);
+                    draw byLabelsOnPolygon(scantokens(getAttribute("arbitraryCurve", "PointsList", str cN)), noPoint)(OMIT_LABELS_AT_STRAIGHT_ANGLES, 0);
                 fi;
             fi;
         endfor;
@@ -3862,7 +3887,7 @@ enddef;
 vardef byLabelPolygon(expr d)(text polygonsList) =
     image(
         if (textLabels):
-            draw byLabelsOnPolygon(scantokens byMergePolygons(polygonsList))(1, d);
+            draw byLabelsOnPolygon(scantokens byMergePolygons(polygonsList))(OMIT_LABELS_AT_STRAIGHT_ANGLES, d);
         fi;
     )
 enddef;
@@ -3960,19 +3985,19 @@ vardef byLabelsOnPolygon(text pointsList)(expr sty, shft)=
                         q3 := p2 shifted q5;
                         q6 = whatever[q0, q1] = whatever[q2, q3];
                     else:
-                        if (sty <> 1) or (stump <> 0):
+                        if (sty <> OMIT_LABELS_AT_STRAIGHT_ANGLES) or (stump <> 0):
                             q6 := p1 shifted q4;
                         else:
                             q6 := p1;
                         fi;
                     fi;
-                    if (sty = 2) and ((j = 0) or (j = i)):
+                    if ((sty = OMIT_FIRST_LABEL + OMIT_LAST_LABEL) or (sty = OMIT_FIRST_AND_LAST_LABEL)) and ((j = 0) or (j = i)):
                         pointDrawn.scantokens(pointName[j]) := true;
                     fi;
-                    if (sty = 3) and (j = 0):
+                    if (sty = OMIT_FIRST_LABEL) and (j = 0):
                         pointDrawn.scantokens(pointName[j]) := true;
                     fi;
-                    if (sty = 4) and (j = i):
+                    if (sty = OMIT_LAST_LABEL) and (j = i):
                         pointDrawn.scantokens(pointName[j]) := true;
                     fi;
                     if (q6 <> p1) and (not pointDrawn.scantokens(pointName[j])):
