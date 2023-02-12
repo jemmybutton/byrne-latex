@@ -28,6 +28,15 @@ end
 
 \def\formatImageName#1{\directlua{byFormatImageName("#1")}}
 
+\def\UseNextPicture{%
+        \global\advance \mpInst by 1%
+        \global\def\currentInstance{byInstance\the\mpInst}%
+}
+
+\def\UsePreviousPicture{%
+        \global\advance \mpInst by -1%
+        \global\def\currentInstance{byInstance\the\mpInst}%
+}
 
 \DeclareDocumentCommand{\defineNewPicture}{o o m}{%
 	\IfNoValueTF{#1}%
@@ -117,9 +126,14 @@ end
 
 \newdimen\pictOffsetTop
 \newdimen\pictOffsetBottom
+\newdimen\pictVMargins
 
 \pictOffsetTop=0pt
 \pictOffsetBottom=0pt
+\pictVMargins=2pt
+
+\newif\ifRemoveMarginsFromSmallerPics
+\RemoveMarginsFromSmallerPicstrue
 
 \def\offsetPicture#1#2#3{{\pictOffsetTop=#1\pictOffsetBottom=#2#3\pictOffsetTop=0pt\pictOffsetBottom=0pt}}
 
@@ -127,8 +141,8 @@ end
 \newdimen\middp
 \def\drawDefinedPicture#1#2{%
 	\setbox0\vbox{\drawImageFromCurrentInstance{\formatImageName{#1}}}%
-	\ifdim\ht0<\baselineskip\advance\pictOffsetTop by 1pt\advance\pictOffsetBottom by 1pt\fi%
-	\setbox0\vbox{\vskip2pt\vskip-\pictOffsetTop\box0\vskip2pt\vskip-\pictOffsetBottom}%
+	\ifRemoveMarginsFromSmallerPics\ifdim\ht0<\baselineskip\advance\pictOffsetTop by 1pt\advance\pictOffsetBottom by 1pt\fi\fi%
+	\setbox0\vbox{\vskip\pictVMargins\vskip-\pictOffsetTop\box0\vskip\pictVMargins\vskip-\pictOffsetBottom}%
 	\def\tmpmiddle{middle}%
 	\def\tmpalignment{#2}%
 	\ifx\tmpalignment\tmpmiddle%
