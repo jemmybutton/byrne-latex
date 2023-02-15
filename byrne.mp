@@ -1047,6 +1047,20 @@ vardef byNamedLine (text linesList) =
     )
 enddef;
 
+vardef byNamedLineIgnoreEndTypes (text linesList) =
+    image(
+        forsuffixes lN=linesList:
+            draw byNamedLineFull(
+                scantokens(getAttribute("line", "EndAName", str lN)),
+                scantokens(getAttribute("line", "EndBName", str lN)),
+                0,
+                0,
+                0,
+                0)(lN);
+        endfor;
+    )
+enddef;
+
 vardef byNamedLineSeq (expr s)(text linesListRaw) =
     save lAname, lBname, lShift, lName, i, j, k, l, m, n, c, d, prp, dpt, dashStreak, pointNames, linesList;
     string lAname[], lBname[], lName[], c, d, pointNames, linesList;
