@@ -23,7 +23,7 @@
 
 \directlua{
 function byFormatImageName(s)
-	local resultingName = s:gsub ("," , "")
+	local resultingName = s:gsub ("[,| |/|0-9]","")
 	tex.print("instanceOffspringPicture"..resultingName)
 end
 }
