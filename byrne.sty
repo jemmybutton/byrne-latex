@@ -24,6 +24,7 @@
 \directlua{
 function byFormatImageName(s)
 	local resultingName = s:gsub ("[,| |/|0-9]","")
+	resultingName = resultingName:gsub ("-","minus")
 	tex.print("instanceOffspringPicture"..resultingName)
 end
 }
