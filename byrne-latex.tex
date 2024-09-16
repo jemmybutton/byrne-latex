@@ -53,7 +53,7 @@ basicstyle=\ttfamily\scriptsize
 \def\mpPre{textLabels := true;}
 
 \author{Sergey Slyusarev}
-\title{``Byrne'' v. 0.2.4 package for \METAPOST\ and \LaTeX}
+\title{``Byrne'' v. 0.2.5 package for \METAPOST\ and \LaTeX}
 
 \begin{document}
 \maketitle
@@ -352,8 +352,17 @@ The following reference guide is not complete and will be updated in the future.
 	}.
 	
 	\texttt{LINES\_LIST}~— a comma-separated list of line names.
-	
 
+\subsubsection{byNamedLineSeqByPoint(lineShift, isCyclic)(POINTS\_LIST)}\label{byNamedLineSeq}
+
+	Draws lines joined in sequence, just as \texttt{byNamedLineSeq}, but built using a list of points.
+
+	\texttt{lineShift}~— how much the lines are shifted perpendicular lines' axis. \texttt{1} is for one regular line thickness to one side%
+
+	\texttt{isCyclic}~— sould the sequence be closed, boolean. Another way to prevent closing of the sequence is to add \texttt{noPoint} as the last point%
+
+	\texttt{POINTS\_LIST}~— a comma-separated list of point names.
+	
 \subsubsection{byMarkLine(position, color)(LineName)}\label{byMarkLine}
 
 	\defineNewPicture[1]{
@@ -1205,7 +1214,19 @@ Draws a text label for a point. Returns a picture of the label.
 	\texttt{LineName}~— name of the line to reference in the main diagram. 
 	
 	If a name is given, can be called later using \texttt{\textbackslash LineNewName}, otherwise~— \texttt{\textbackslash lineLineName}. 
+
+\subsubsection{\textbackslash drawLineByPoints[verticalAlignment][LineNewName]\{PointNames\}}
+
+	Draws a line, built, using a list of points.
+
+	\texttt{verticalAlignment}~— optional vertical alignment declaration. \texttt{middle} to align the picture with the middle of the line, anything else for bottom alignment.
 	
+	\texttt{LineNewName}~— optional line name. 
+	
+	\texttt{PointNames}~— names of the points, constituting the line. 
+	
+	If a name is given, can be called later using \texttt{\textbackslash LineNewName}, otherwise~— \texttt{\textbackslash lineLineName}. 
+
 \subsubsection{\textbackslash drawPointM\{PointName\}}
 
 	\defineNewPicture{
