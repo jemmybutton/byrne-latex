@@ -14,7 +14,7 @@
 }
 @misc{Slyusarev2017,
   author = {Slyusarev, Sergey},
-  title = {{MetaPost + ConTeXt rendition of Oliver Byrne's "The first six books of the Elements of Euclid"}},
+  title = {{MetaPost + TeX rendition of Oliver Byrne's "The first six books of the Elements of Euclid"}},
   year = {2017},
   howpublished = {\url{https://github.com/jemmybutton/byrne-euclid}}
 }
@@ -73,11 +73,11 @@ This document is distributed under CC-BY-SA 4.0 license
 \end{centering}
 
 \section{Introduction}
-Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 quirky edition on the first six books of Euclid's ``Elements''}\cite{Byrne1847} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
+Oliver Byrne's \href{https://archive.org/details/firstsixbooksofe00byrn/}{1847 edition on the first six books of Euclid's ``Elements''}\cite{Byrne1847} is an interesting example of tight interplay between text and graphics in information visualization. The main feature of this book is that instead of relying on letter designations to describe lines, angles, etc., all the diagrams in it are colored and parts of these diagrams are directly incorporated into text.
 
-Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub\cite{Slyusarev2017}, in late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux\cite{Rougeux2018} and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three are very different in terms of approach and goals.
+Recently this work met somewhat of a renaissance and in the span of a couple of years at least three independent attempts were made at reviving Byrne's work. In early 2017 the first six books \href{https://github.com/jemmybutton/byrne-euclid/}{remade in \ConTeXt} were published on GitHub, and later migrated to \LaTeX \cite{Slyusarev2017}, in late 2018 an \href{https://www.c82.net/euclid/}{interactive web-version} was published by Nicholas Rougeux\cite{Rougeux2018} and in late 2019 a \href{https://www.kroneckerwallis.com/product/euclids-elements-completing-oliver-byrnes-work/}{printed version} of all Euclid's 15 books was published by Kronecker Wallis. All three are very different in terms of approach and goals.
 
-The \ConTeXt\ version's main objective was to develop a toolkit for applying Byrne's approach to a variety of geometry problems in the least time-consuming manner. This package is a \LaTeX\ (specifically \LuaLaTeX) version of the toolkit. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
+This package is a \LaTeX\ (specifically \LuaLaTeX) version of the toolkit devised for the \TeX version of the book. It consists of two parts: \METAPOST\ code to describe and render geometric constructions and \LaTeX\ code to incorporate these constructions in text.
 
 \section{Requirements}
 
