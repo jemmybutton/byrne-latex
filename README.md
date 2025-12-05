@@ -5,5 +5,5 @@ of [Oliver Byrne's "The first six books of the Elements of Euclid"](https://en.w
 
 Byrne's book in full made using this package can be found [here](https://github.com/jemmybutton/byrne-euclid/).
 
-It was tested and works with TeX Live 2021, but should work with earlier versions,
+It was tested and works with TeX Live 2025, but should work with earlier versions,
 except for it requires [luamplib v2.23.0](https://github.com/lualatex/luamplib/releases/tag/v2.23.0)
