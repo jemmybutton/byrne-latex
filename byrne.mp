@@ -4016,7 +4016,7 @@ if known metafunversion:
     enddef;
 else:
     input TEX;
-    TEXPRE("%&latex" & char(10) & "\documentclass{article}\usepackage[utf8]{inputenc}\usepackage[russian]{babel}\def\pointlabel#1{\textsf{#1}}\begin{document}");
+    TEXPRE("%&latex" & char(10) & "\documentclass{article}\usepackage[utf8]{inputenc}\usepackage[russian]{babel}\def\pointlabel#1{\textup{\textsf{#1}}}\begin{document}");
     TEXPOST("\end{document}");
     vardef textLabelRender(expr t) =
         TEX("\pointlabel{" & t & "}") scaled textLabelScaleFactor
