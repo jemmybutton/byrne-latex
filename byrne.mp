@@ -1303,27 +1303,39 @@ vardef byNamedMarkLine(suffix lineName) =
     p rotated globalRotation
 enddef;
 
-vardef byFindLinePointedThere (expr a, b) =
-    save endA, endB, endAC, endBC, endAA, endBA, chosenLine, lL;
+vardef byFindLinePointedThere (expr a, b, checkForLength) =
+    save endA, endB, endAC, endBC, endAA, endBA, chosenLine, lL, useLine;
     string chosenLine;
     pair endA, endB, endAC, endBC, endAA, endBA;
     numeric lL;
+    boolean useLine;
     endA := scantokens(a);
     endB := b;
     if known pointLinesList.scantokens(a):
         forsuffixes lL=scantokens(pointLinesList.scantokens(a)):
-            endAC := scantokens(getAttribute("line", "EndAName", str lL));
-            endBC := scantokens(getAttribute("line", "EndBName", str lL));
-            if (endAC = endA):
-                endAA := endAC;
-                endBA := endBC;
-            elseif (endBC = endA):
-                endAA := endBC;
-                endBA := endAC;
-            fi;
-            if ((abs(angle(endBA - endAA) - angle(endB - endA)) mod 360) < 1):
-                chosenLine := str lL;
-            fi;
+			endAC := scantokens(getAttribute("line", "EndAName", str lL));
+			endBC := scantokens(getAttribute("line", "EndBName", str lL));
+			if (endAC = endA):
+				endAA := endAC;
+				endBA := endBC;
+			elseif (endBC = endA):
+				endAA := endBC;
+				endBA := endAC;
+			fi;
+			if (endB <> endA):
+				if ((abs(angle(endBA - endAA) - angle(endB - endA)) mod 360) < 1):
+					useLine := true;
+					if checkForLength:
+						useLine := false;
+						if abs(endBA - endAA) <= abs(endB - endA):
+							useLine := true;
+						fi;
+					fi;
+					if useLine:
+						chosenLine := str lL;
+					fi;
+				fi;
+			fi;
         endfor;
     fi;
     if unknown chosenLine:
@@ -1362,7 +1374,7 @@ vardef byConstructCompoundLine (expr lineName) =
     i := 0;
     forever:
         i := i + 1;
-        newLine := byFindLinePointedThere(lineStart, scantokens(lEnd));
+        newLine := byFindLinePointedThere(lineStart, scantokens(lEnd), true);
         if (newLine = ""):
             errmessage("There's no line from " & lineStart & " to " & lEnd);
         fi;
@@ -1516,8 +1528,8 @@ vardef byNamedCompoundLineRender (expr cu, pw, sty)(text linesList) =
             fi;
             j := j + 1;
         endfor;
-        extensionNames0 := byFindLinePointedThere(endNames1, 2[scantokens(endNames0), scantokens(endNames1)]);
-        extensionNames1 := byFindLinePointedThere(endNames0, 2[scantokens(endNames1), scantokens(endNames0)]);
+        extensionNames0 := byFindLinePointedThere(endNames1, 2[scantokens(endNames0), scantokens(endNames1)], false);
+        extensionNames1 := byFindLinePointedThere(endNames0, 2[scantokens(endNames1), scantokens(endNames0)], false);
         if extensionNames0 = "":
             extensionNames0 := "dummyLine";
         else:
